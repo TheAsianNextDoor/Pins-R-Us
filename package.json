@@ -1,0 +1,18 @@
+{
+  "name": "automatedpins",
+  "version": "1.0.0",
+  "description": "Project for automated purchasing of pins",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jeff Chang",
+  "license": "ISC",
+  "dependencies": {
+    "chromedriver": "^84.0.1",
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1"
+  }
+}
