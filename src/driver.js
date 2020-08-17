@@ -45,14 +45,4 @@ export default class Driver {
      * @returns
      */
     killDriver = () => this.getDriver().quit();
-
-    /**
-     * Finds HTML element in dom
-     * @param {Locator} locator
-     * @returns {WebElement}
-     */
-    findElement = async (locator) => {
-        const elementArray = await getDriver().findElements(locator);
-        return elementArray.length === 1 ? elementArray[0] : elementArray;
-    };
 }

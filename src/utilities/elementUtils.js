@@ -20,7 +20,7 @@ export const addBy = (by1, by2) => ([
 /**
  * Ensures item in instance of a Selenium WebElement, else throws Error
  * @param {*} item The item to check
- * @returns {WebElement | Error}
+ * @returns {WebElement}
  */
 export const ensureIsWebElement = (item) => {
     if (item instanceof WebElement) {
@@ -28,6 +28,20 @@ export const ensureIsWebElement = (item) => {
     }
     throw new Error(`${item} was not an instance of a WebElement`);
 };
+
+/**
+     * Finds HTML elements in dom
+     * @param {Locator} locator
+     * @returns {WebElement[]}
+     */
+export const findElements = async (locator) => getDriver().findElements(locator);
+
+/**
+     * Finds HTML element in dom
+     * @param {Locator} locator
+     * @returns {WebElement}
+     */
+export const findElement = async (locator) => getDriver().findElement(locator);
 
 /**
  * Locates an element in the DOM

@@ -7,12 +7,14 @@ import {
 /**
  * Enumeration for Selenium element locators
  * @param {string} string
- * @returns {Locator[]}
+ * @returns {Locator}
  */
 export const by = {
-    id: (string) => ([By.id(string)]),
-    css: (string) => ([By.css(string)]),
-    xpath: (string) => ([By.xpath(string)]),
-    name: (string) => ([By.name(string)]),
-    className: (string) => ([By.className(string)]),
+    id: (string) => (By.id(string)),
+    css: (string) => (By.css(string)),
+    xpath: (string) => (By.xpath(string)),
+    name: (string) => (By.name(string)),
+    className: (string) => (By.className(string)),
+    linkText: (string) => By.linkText(string),
+    partialLinkText: (string) => By.partialLinkText(string),
 };
