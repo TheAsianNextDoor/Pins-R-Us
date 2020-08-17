@@ -1,6 +1,6 @@
-import Driver from './driver';
+import { getDriver } from './driver';
 
-export const navToURL = (url) => Driver.getDriver().get(url);
+export const navToURL = (url) => getDriver().get(url);
 
-export const getCurrentURL = () => Driver.getDriver().getCurrentURL();
+export const getCurrentURL = () => getDriver().getCurrentURL();
 

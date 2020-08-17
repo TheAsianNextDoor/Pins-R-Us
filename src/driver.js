@@ -15,27 +15,28 @@ export let webDriver = {
     message: 'WebDriver has not been initialized yet',
 };
 
+/**
+ * Returns the instance of the initialized Chrome webDriver
+ * @returns {WebDriver}
+ */
+export const getDriver = () => webDriver;
+
+/**
+ * Sets the private webdriver variable
+ * @param {WebDriver} driver
+ * @returns {void}
+ */
+export const setDriver = (driver) => { webDriver = driver; };
+
 export default class Driver {
-    /**
-     * Returns the instance of the initialized Chrome webDriver
-     * @returns {WebDriver}
-     */
-    static getDriver = () => webDriver;
-
-    /**
-     * Sets the private webdriver variable
-     * @param {WebDriver} driver
-     * @returns {void}
-     */
-    setDriver = (driver) => { webDriver = driver; };
-
     /**
      * Creates an instance of the chrome webdriver and sets the private webdriver variable
      * @returns {WebDriver}
      */
-    initializeDriver = () => {
+    initializeDriver = async () => {
         const newDriver = new Builder().forBrowser('chrome').build();
-        this.setDriver(newDriver);
+        await newDriver.manage().window().maximize();
+        setDriver(newDriver);
         return newDriver;
     };
 
@@ -51,7 +52,7 @@ export default class Driver {
      * @returns {WebElement}
      */
     findElement = async (locator) => {
-        const elementArray = await this.getDriver().findElements(locator);
+        const elementArray = await getDriver().findElements(locator);
         return elementArray.length === 1 ? elementArray[0] : elementArray;
     };
 }
