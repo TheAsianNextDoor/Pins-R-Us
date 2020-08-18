@@ -3,6 +3,10 @@ import {
     // eslint-disable-next-line no-unused-vars
     Locator,
 } from 'selenium-webdriver';
+import { STRINGS } from './stringUtils';
+
+const SINGLE_REPLACEMENT = `", "${STRINGS.SINGLE_QUOTE}", "`;
+const DOUBLE_REPLACEMENT = `", '${STRINGS.DOUBLE_QUOTE}', "`;
 
 /**
  * Ensures the locator is of type xpath
@@ -40,22 +44,57 @@ export const concatXpathBysWithOr = (xpathObject1, xpathObject2) => {
     return By.xpath(`${xpathObject1.value} | ${xpathObject2.value}`);
 };
 
-export const addBys = (by1, by2) => [
-    ...by1,
-    ...by2,
-];
+/**
+ * Concatenates by1 and by2
+ * @param {Locator[]} by1
+ * @param {Locator[]} by2
+ */
+export const addBys = (by1, by2) => by1.concat(by2);
+
+
+/**
+ * Normalizes single and double quotes and preps string to be used in xpath concat function
+ * @param str
+ * @returns {string}
+ */
+export const escapeQuotesForXpath = (str) => `"${
+    str.split(STRINGS.DOUBLE_QUOTE)
+        .map((subStr) => subStr
+            .split(STRINGS.SINGLE_QUOTE)
+            .join(SINGLE_REPLACEMENT))
+        .join(DOUBLE_REPLACEMENT)
+}"`;
+
+/**
+ * Normalizes single and double quotes
+ * Example: By.xpath(`//*[contains(text(), concat("my dog", "'", "s collar"))]`);
+ * @param str
+ * @returns {string}
+ */
+export const textContainsNormalizedQuotes = (str) => `contains(text(), concat(${escapeQuotesForXpath(str)}, ''))`;
+
+/**
+ * Normalizes single and double quotes for exact text matches
+ * Example: By.xpath(`//*[contains(text(), concat("my dog", "'", "s collar"))]`);
+ * @param str
+ * @returns {string}
+ */
+export const textMatchesNormalizedQuotes = (str) => `normalize-space(text()) = concat(${
+    escapeQuotesForXpath(str)
+}, '')`;
 
 /**
  * Enumeration for Selenium element locators
- * @param {string} string
+ * All inputs are of type string
+ * Wraps Locator in an array to be parsed later
  * @returns {Locator}
  */
 export const by = {
-    id: (string) => [By.id(string)],
-    css: (string) => [By.css(string)],
-    xpath: (string) => [By.xpath(string)],
-    name: (string) => [By.name(string)],
-    className: (string) => [By.className(string)],
-    linkText: (string) => [By.linkText(string)],
-    partialLinkText: (string) => [By.partialLinkText(string)],
+    id: (id) => [By.id(id)],
+    css: (cssSelector) => [By.css(cssSelector)],
+    xpath: (xpath) => [By.xpath(xpath)],
+    name: (name) => [By.name(name)],
+    className: (className) => [By.className(className)],
+    linkText: (linkText) => [By.linkText(linkText)],
+    partialLinkText: (partialLinkText) => [By.partialLinkText(partialLinkText)],
 };

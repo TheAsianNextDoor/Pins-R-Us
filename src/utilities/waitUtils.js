@@ -5,6 +5,7 @@ import Locator, {
     WebElement,
 } from 'selenium-webdriver';
 import { getDriver } from '../driver';
+import { locateElement } from './elementUtils';
 
 export const elementNotFound = {
     toString: () => 'ElementNotFound',
@@ -13,22 +14,23 @@ export const elementNotFound = {
 export const wait = async (millisToWait) => new Promise((resolve) => { setTimeout(resolve, millisToWait); });
 
 /**
- * Waits until a WebElement is located or the maximum time has elapsed
+ * Waits until a WebElement is visible or the maximum time has elapsed
  *
- * @param {Locator} by
- * @param {boolean} [throwError]
+ * @param {Locator[]} by The WebElement's Locator
+ * @param {boolean} [throwError] Whether or not the function should throw
  * @returns {Promise<WebElement>| Error | Promise<elementNotFound>}
  */
-export const waitUntilElementLocated = async (
+export const waitUntilElementIsVisible = async (
     by,
     throwError = true,
 ) => {
     const driver = getDriver();
     try {
+        const el = await locateElement(by);
         return driver.wait(
-            until.elementLocated(by),
+            until.elementIsVisible(el),
             10000,
-            `Unable to locate WebElement using: ${by}`,
+            `Unable to locate WebElement using locator: ${by}`,
         );
     } catch (e) {
         if (throwError) {

@@ -16,7 +16,7 @@ const retryConfig = (onRetryFunc) => ({
 /**
  * Asynchronously retries a function by locating the WebElement from a Locator and
  * passing it to the function
- * @param {Locator} by The Locator to find the WebElement
+ * @param {Locator[]} by The Locator to find the WebElement
  * @param {Function} retryFunc The function to retry
  * @param {Function} [onRetryFunc] The function to execute upon each retry
  * @returns {Promise<*>}
@@ -27,11 +27,17 @@ export const retryWithElement = async (
     onRetryFunc = () => {},
 ) => retry(
     async (bail, iteration) => {
+        if (
+            !(by instanceof Array)
+            || by.length < 1
+        ) {
+            bail(new Error(`Must pass a valid Locator Array to retryWithElement, passed:${by}`));
+        }
         const element = await locateElement(by);
         return retryFunc(element, bail, iteration);
     },
     retryConfig(onRetryFunc),
-).catch((e) => console.log(`Threw from basic retry - ${e}`));
+).catch((e) => { throw new Error(`Threw from retryWIthElement - ${e}`); });
 
 /**
  * Asynchronously retries a given function
@@ -45,4 +51,4 @@ export const basicRetry = async (
 ) => retry(
     async (bail, iteration) => retryFunc(bail, iteration),
     retryConfig(onRetryFunc),
-).catch((e) => console.log(`Threw from basic retry - ${e}`));
+).catch((e) => { throw new Error(`Threw from basicRetry - ${e}`); });
