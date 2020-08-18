@@ -1,7 +1,5 @@
 import Button from '../controls/button';
-import { pressEnter } from '../utilities/actionUtils';
 import { by } from '../utilities/byUtils';
-import { wait } from '../utilities/waitUtils';
 import Input from '../controls/input';
 import Select from '../controls/select';
 
@@ -44,7 +42,6 @@ export default class LotuCheckout {
         await this.city.setValue(city);
         await this.state.setValue(state);
         await this.zip.setValueAndTabOff(zip);
-        // await wait(2000);
         await this.continueToShippingButton.click();
     }
 }

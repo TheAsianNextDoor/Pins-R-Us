@@ -1,31 +1,37 @@
 import { basicRetry } from '../utilities/retryUtils';
 import {
-    setText,
     getValue,
     click,
+    setValue,
 } from '../utilities/actionUtils';
-import { by } from '../utilities/byUtils';
-import { addBy } from '../utilities/elementUtils';
+import {
+    by,
+    addBys,
+} from '../utilities/byUtils';
 
 export default class Select {
     constructor(rootBy) {
         this.rootBy = rootBy;
     }
 
-    getOptionByFromText = (optionText) => addBy(
+    getOptionByFromText = (optionText) => addBys(
         this.rootBy,
         by.xpath(`.//option[text()='${optionText}']`),
     );
 
     getValue = async () => getValue(this.rootBy);
 
-    click = async () => click(this.rootBy);
+    clickSelect = async () => click(this.rootBy);
 
-    setValue = async (text) => {
+    clickOption = async (optionText) => {
+        const optionBy = this.getOptionByFromText(optionText);
+        console.log(`Attempting to click option locator: ${optionBy}`);
+        await click(optionBy);
+    }
+
+    setValue = async (optionText) => {
         await basicRetry(async () => {
-            await this.click();
-            const optionBy = this.getOptionByFromText(text);
-            await click(optionBy);
+            await setValue(this.rootBy, optionText);
         });
     }
 }

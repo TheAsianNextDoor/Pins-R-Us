@@ -8,6 +8,7 @@ import {
 import { ensureIsWebElement } from './elementUtils';
 import { getDriver } from '../driver';
 import { retryWithElement } from './retryUtils';
+import { wait } from './waitUtils';
 
 
 /**
@@ -20,9 +21,26 @@ const getActions = () => getDriver().actions({
 });
 
 /**
+ * Scrolls the WebElement into view
+ * @param {WebElement} webElement
+ */
+export const scrollIntoViewIfNeeded = async (webElement) => {
+    const driver = getDriver();
+    await driver.executeScript(
+        `
+        if (arguments[0].scrollIntoViewIfNeeded instanceof Function){
+            arguments[0].scrollIntoViewIfNeeded();
+        }
+        `,
+        webElement,
+    );
+    await wait(25);
+};
+
+/**
  * Clicks a WebElement in the DOM given a locator
  *
- * @param {Locator} by The Locator that points to the WebElement
+ * @param {Locator[]} by The Locator Array that points to the WebElement
  * @returns {Promise<void>}
  */
 export const click = async (by) => retryWithElement(
@@ -30,6 +48,7 @@ export const click = async (by) => retryWithElement(
     async (element) => {
         const el = ensureIsWebElement(element);
         const actions = getActions();
+        await scrollIntoViewIfNeeded(el);
         await actions
             .move({
                 x: 0,
@@ -43,7 +62,7 @@ export const click = async (by) => retryWithElement(
 
 /**
  * Sends keys to a WebElement in the DOM given a Locator
- * @param {Locator} by The Locator that points to the WebElement
+ * @param {Locator[]} by The Locator Array that points to the WebElement
  * @param {string} text The text to set
  * @returns {Promise<void>}
  */
@@ -62,23 +81,40 @@ export const setText = async (
 /**
  * Retrieves the text from a WebElement given a Locator
  *
- * @param {Locator} by The Locator to find the WebElement
+ * @param {Locator[]} by The Locator Array to find the WebElement
  * @returns {Promise<string>}
  */
 export const getText = async (by) => retryWithElement(
     by,
     async (element) => {
         const el = ensureIsWebElement(element);
-        const a = await el.getText();
-        const b = [];
-        return a;
+        return el.getText();
+    },
+);
+
+export const setValue = async (
+    by,
+    value,
+) => retryWithElement(
+    by,
+    async (element) => {
+        const el = ensureIsWebElement(element);
+        const driver = getDriver();
+        await driver.executeScript(
+            `
+            arguments[0].value='arguments[1]';
+        `,
+            el,
+            value,
+        );
+        await wait(25);
     },
 );
 
 /**
  * Retrieves the value attribute from a WebElement given a Locator
  *
- * @param {Locator} by The Locator to find the WebElement
+ * @param {Locator[]} by The Locator Array to find the WebElement
  * @returns {Promise<string>}
  */
 export const getValue = async (by) => retryWithElement(

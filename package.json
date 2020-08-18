@@ -1,7 +1,9 @@
 {
   "version": "1.0.0",
   "scripts": {
-    "index": "node --require @babel/register ./src/index.js"
+    "index": "node --require @babel/register ./src/index.js",
+    "eslint-fix": "./node_modules/.bin/eslint --fix",
+    "eslint-fix-all": "npm run eslint-fix ./src/**"
   },
   "license": "ISC",
   "dependencies": {
