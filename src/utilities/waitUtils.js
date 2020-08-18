@@ -10,7 +10,7 @@ export const elementNotFound = {
     toString: () => 'ElementNotFound',
 };
 
-export const wait = async (millisToWait) => new Promise(async (resolve) => setTimeout(resolve, millisToWait));
+export const wait = async (millisToWait) => new Promise((resolve) => { setTimeout(resolve, millisToWait); });
 
 /**
  * Waits until a WebElement is located or the maximum time has elapsed

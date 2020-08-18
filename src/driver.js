@@ -10,8 +10,10 @@ import {
 } from 'selenium-webdriver';
 
 
-// eslint-disable-next-line import/no-mutable-exports
-export let webDriver = {
+/**
+ * The private WebDriver instance
+ */
+let webDriver = {
     message: 'WebDriver has not been initialized yet',
 };
 
@@ -26,23 +28,26 @@ export const getDriver = () => webDriver;
  * @param {WebDriver} driver
  * @returns {void}
  */
-export const setDriver = (driver) => { webDriver = driver; };
+export const setDriver = (driver) => {
+    if (!(driver instanceof WebDriver)) {
+        throw new Error(`driver was not an instance of WebDriver: ${driver}`);
+    }
+    webDriver = driver;
+};
 
-export default class Driver {
-    /**
-     * Creates an instance of the chrome webdriver and sets the private webdriver variable
-     * @returns {WebDriver}
-     */
-    initializeDriver = async () => {
-        const newDriver = new Builder().forBrowser('chrome').build();
-        await newDriver.manage().window().maximize();
-        setDriver(newDriver);
-        return newDriver;
-    };
+/**
+ * Creates an instance of the chrome webdriver and sets the private webdriver variable
+ * @returns {WebDriver}
+ */
+export const initializeDriver = async () => {
+    const newDriver = new Builder().forBrowser('chrome').build();
+    await newDriver.manage().window().maximize();
+    setDriver(newDriver);
+    return newDriver;
+};
 
-    /**
-     * Kills the webdriver instance, thus closing chrome
-     * @returns
-     */
-    killDriver = () => this.getDriver().quit();
-}
+/**
+ * Kills the webdriver instance, thus closing chrome
+ * @returns
+ */
+export const killDriver = () => this.getDriver().quit();

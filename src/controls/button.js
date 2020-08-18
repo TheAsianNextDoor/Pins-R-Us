@@ -1,8 +1,8 @@
 import { click } from '../utilities/actionUtils';
 
 export default class Button {
-    constructor(by) {
-        this.by = by;
+    constructor(rootBy) {
+        this.by = rootBy;
     }
 
     click = async () => click(this.by);

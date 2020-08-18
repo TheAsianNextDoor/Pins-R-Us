@@ -1,11 +1,9 @@
 import Button from '../controls/button';
-import {
-    pressEnter,
-    setText,
-} from '../utilities/actionUtils';
+import { pressEnter } from '../utilities/actionUtils';
 import { by } from '../utilities/byUtils';
 import { wait } from '../utilities/waitUtils';
-
+import Input from '../controls/input';
+import Select from '../controls/select';
 
 export default class LotuCheckout {
     constructor() {
@@ -15,61 +13,20 @@ export default class LotuCheckout {
         this.lastNameBy = by.id(`${checkoutPrefix}last_name`);
         this.addressBy = by.id(`${checkoutPrefix}address1`);
         this.cityBy = by.id(`${checkoutPrefix}city`);
+        this.stateBy = by.id(`${checkoutPrefix}province`);
         this.zipBy = by.id(`${checkoutPrefix}zip`);
         this.continueToShippingBy = by.xpath(`//span[text()='Continue to shipping']`);
 
-        this.email = '';
-        this.firstName = '';
-        this.lastName = '';
-        this.address = '';
-        this.city = '';
-        this.zip = '';
-
-        // controls
+        // Controls
+        this.email = new Input(this.emailBy);
+        this.firstName = new Input(this.firstNameBy);
+        this.lastName = new Input(this.lastNameBy);
+        this.address = new Input(this.addressBy);
+        this.city = new Input(this.cityBy);
+        this.state = new Select(this.stateBy);
+        this.zip = new Input(this.zipBy);
         this.continueToShippingButton = new Button(this.continueToShippingBy);
     }
-
-    /**
-     * Sets the checkout email field to a given text
-     * @param {string} email The email to set
-     * @returns {Promise<void>}
-     */
-    setEmail = async (email) => setText(this.emailBy, email);
-
-    /**
-     * Sets the checkout first name field to a given text
-     * @param {string} firstName The firs name to set
-     * @returns {Promise<void>}
-     */
-    setFirstName = async (firstName) => setText(this.firstNameBy, firstName);
-
-    /**
-     * Sets the checkout last name field to a given text
-     * @param {string} email The last name to set
-     * @returns {Promise<void>}
-     */
-    setLastName = async (lastName) => setText(this.lastNameBy, lastName);
-
-    /**
-     * Sets the checkout address field to a given text
-     * @param {string} email The address to set
-     * @returns {Promise<void>}
-     */
-    setAddress = async (address) => setText(this.addressBy, address);
-
-    /**
-     * Sets the checkout city field to a given text
-     * @param {string} email The city  to set
-     * @returns {Promise<void>}
-     */
-    setCity = async (city) => setText(this.cityBy, city);
-
-    /**
-     * Sets the checkout zip field to a given text
-     * @param {string} email The zip to set
-     * @returns {Promise<void>}
-     */
-    setZip = async (zip) => setText(this.zipBy, zip);
 
     expressCheckout = async ({
         email,
@@ -77,16 +34,17 @@ export default class LotuCheckout {
         lastName,
         address,
         city,
+        state,
         zip,
     }) => {
-        await this.setEmail(email);
-        await this.setFirstName(firstName);
-        await this.setLastName(lastName);
-        await this.setAddress(address);
-        await this.setCity(city);
-        await this.setZip(zip);
-        await pressEnter();
-        await wait(5000);
+        await this.email.setValue(email);
+        await this.firstName.setValue(firstName);
+        await this.lastName.setValue(lastName);
+        await this.address.setValue(address);
+        await this.city.setValue(city);
+        await this.state.setValue(state);
+        await this.zip.setValueAndTabOff(zip);
+        // await wait(2000);
         await this.continueToShippingButton.click();
     }
 }
