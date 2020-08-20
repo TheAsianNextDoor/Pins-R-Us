@@ -1,11 +1,12 @@
-import { navToURL } from '../navigation';
+import { navToURL } from '../../navigation';
 import {
     by,
     addBys,
     textMatchesNormalizedQuotes,
+    ancestorAtPosition,
 
-} from '../utilities/byUtils';
-import { click } from '../utilities/actionUtils';
+} from '../../utilities/byUtils';
+import { click } from '../../utilities/actionUtils';
 import LotuPinPage from './lotuPinPage';
 
 export default class LotuCollections {
@@ -18,16 +19,18 @@ export default class LotuCollections {
         this.collectionBy,
         by.xpath(`.//span[${
             textMatchesNormalizedQuotes(name)
-        }]/ancestor-or-self::a[position()=1]`),
-    )
+        }]/${
+            ancestorAtPosition('a', 1)
+        }`),
+    );
 
     clickTileLinkByName = async (name) => {
         await click(this.getTileLinkByFromName(name));
         return new LotuPinPage();
-    }
+    };
 
     navTo = async () => {
         await navToURL(this.url);
         return new LotuCollections();
-    }
+    };
 }

@@ -1,7 +1,8 @@
-import Button from '../controls/button';
-import { by } from '../utilities/byUtils';
-import Input from '../controls/input';
-import Select from '../controls/select';
+import Button from '../../controls/button';
+import Input from '../../controls/input';
+import Select from '../../controls/select';
+import { by } from '../../utilities/byUtils';
+import LotuShipping from './lotuShipping';
 
 export default class LotuCheckout {
     constructor() {
@@ -35,13 +36,14 @@ export default class LotuCheckout {
         state,
         zip,
     }) => {
-        await this.email.setValue(email);
-        await this.firstName.setValue(firstName);
-        await this.lastName.setValue(lastName);
-        await this.address.setValue(address);
-        await this.city.setValue(city);
+        await this.email.sendKeys(email);
+        await this.firstName.sendKeys(firstName);
+        await this.lastName.sendKeys(lastName);
+        await this.address.sendKeys(address);
+        await this.city.sendKeys(city);
         await this.state.setValue(state);
-        await this.zip.setValueAndTabOff(zip);
+        await this.zip.sendKeysAndTabOff(zip);
         await this.continueToShippingButton.click();
+        return new LotuShipping();
     }
 }

@@ -1,5 +1,5 @@
-import { by } from '../utilities/byUtils';
-import Button from '../controls/button';
+import { by } from '../../utilities/byUtils';
+import Button from '../../controls/button';
 import LotuCheckout from './lotuCheckout';
 
 export default class LotuPinPage {
