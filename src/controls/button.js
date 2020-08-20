@@ -5,5 +5,9 @@ export default class Button {
         this.rootBy = rootBy;
     }
 
+    /**
+     * Clicks button
+     * @returns {Promise<void>}
+     */
     click = async () => click(this.rootBy);
 }
