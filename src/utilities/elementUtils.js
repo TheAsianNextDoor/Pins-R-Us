@@ -5,6 +5,7 @@ import {
     WebElement,
 } from 'selenium-webdriver';
 import { getDriver } from '../driver';
+import { switchToFrame } from './frameUtils';
 
 /**
  * Ensures item in instance of a Selenium WebElement, else throws Error
@@ -25,17 +26,25 @@ export const ensureIsWebElement = (item) => {
  * @returns {Promise<WebElement>}
  */
 export const locateElements = async (locatorArray) => {
-    // driver starts off as root
-    let root = getDriver();
+    // driver starts off as root element
+    let rootElement = getDriver();
     for (let i = 0; i < locatorArray.length; i += 1) {
         const currentBy = locatorArray[i];
-        if (i === (locatorArray.length - 1)) {
-            root = await root.findElements(currentBy);
-        } else {
-            root = await root.findElement(currentBy);
+        const currentElement = await rootElement.findElement(currentBy);
+        console.log('hi');
+        if (await currentElement.getTagName() === 'iframe') {
+            await switchToFrame(await rootElement.findElement(currentBy));
+            rootElement = getDriver();
+            console.log('hi');
+        } else if (i === locatorArray.length - 1) { // if last path, find all paths
+            rootElement = await rootElement.findElements(currentBy);
+            console.log('hi');
+        } else { // if not last by, only find first path
+            rootElement = currentElement;
+            console.log('hi');
         }
     }
-    return root;
+    return rootElement;
 };
 
 /**

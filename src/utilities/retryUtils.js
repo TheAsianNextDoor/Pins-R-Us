@@ -1,5 +1,55 @@
 import retry from 'async-retry';
+import boxen from 'boxen';
 import { locateElement } from './elementUtils';
+import { switchToDefaultFrame } from './frameUtils';
+
+/**
+ * A special variable to track if an error was thrown in retry loops
+ * Stack trace is unable to parse properly through anonymous functions
+ */
+let retryError = null;
+
+/**
+ * Retrieves retry Error
+ *
+ * @returns {Error}
+ */
+export const getRetryError = () => retryError;
+
+/**
+ * Sets the retryError variable to an error
+ *
+ * @param {Error} error The error to set
+ * @returns {void}
+ */
+const setRetryError = (error) => { retryError = error; };
+
+/**
+ * Formats an error stack with boxen
+ *
+ * @param {Error} error The error to format
+ * @param {String} message The message to place in the box
+ * @returns {Error}
+ */
+const formatRetryErrorStack = (error, message) => {
+    const formattedError = error;
+    formattedError.stack = `\n\n${
+        boxen(
+            `\n  ${message}  \n`,
+            {
+                borderStyle: 'double',
+            },
+        )
+    }\n\n${error.stack}\n\n${
+        boxen(
+            `\n  ${message}  \n`,
+            {
+                borderStyle: 'double',
+            },
+        )
+    }\n\n`;
+    return formattedError;
+};
 
 /**
  * The default retry config
@@ -33,11 +83,15 @@ export const retryWithElement = async (
         ) {
             bail(new Error(`Must pass a valid Locator Array to retryWithElement, passed:${by}`));
         }
+        await switchToDefaultFrame();
         const element = await locateElement(by);
         return retryFunc(element, bail, iteration);
     },
     retryConfig(onRetryFunc),
-).catch((e) => { throw new Error(`Threw from retryWIthElement - ${e}`); });
+).catch((e) => {
+    setRetryError(formatRetryErrorStack(e, 'THREW FROM WITHIN retryWithElement'));
+    throw new Error(`Threw from retryWIthElement - ${e}`);
+});
 
 /**
  * Asynchronously retries a given function
@@ -51,4 +105,7 @@ export const basicRetry = async (
 ) => retry(
     async (bail, iteration) => retryFunc(bail, iteration),
     retryConfig(onRetryFunc),
-).catch((e) => { throw new Error(`Threw from basicRetry - ${e}`); });
+).catch((e) => {
+    setRetryError(formatRetryErrorStack(e, 'THREW FROM WITHIN basicRetry'));
+    throw new Error(`Threw from basicRetry - ${e}`);
+});
