@@ -1,12 +1,11 @@
-import { navToURL } from '../../navigation';
-import {
-    by,
-    addBys,
-    textMatchesNormalizedQuotes,
-    ancestorAtPosition,
-
-} from '../../utilities/byUtils';
 import { click } from '../../utilities/actionUtils';
+import {
+    addBys,
+    ancestorAtPosition,
+    by,
+    textMatchesNormalizedQuotes,
+} from '../../utilities/byUtils';
+import { navToURL } from '../../utilities/navigationUtils';
 import LotuPinPage from './lotuPinPage';
 
 export default class LotuCollections {

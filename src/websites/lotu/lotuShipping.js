@@ -1,9 +1,9 @@
+import Button from '../../controls/button';
 import {
+    ancestorAtPosition,
     by,
     containsNormalizedText,
-    ancestorAtPosition,
 } from '../../utilities/byUtils';
-import Button from '../../controls/button';
 import LotuPayment from './lotuPayment';
 
 export default class LotuShipping {
