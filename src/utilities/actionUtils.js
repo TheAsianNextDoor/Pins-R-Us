@@ -1,12 +1,12 @@
 import {
     // eslint-disable-next-line no-unused-vars
-    WebElement,
-    // eslint-disable-next-line no-unused-vars
     Actions,
     Key,
+    // eslint-disable-next-line no-unused-vars
+    WebElement,
 } from 'selenium-webdriver';
-import { ensureIsWebElement } from './elementUtils';
 import { getDriver } from '../driver';
+import { ensureIsWebElement } from './elementUtils';
 import { retryWithElement } from './retryUtils';
 import { wait } from './waitUtils';
 
@@ -66,7 +66,7 @@ export const click = async (by) => retryWithElement(
  * @param {string} text The text to set
  * @returns {Promise<void>}
  */
-export const setText = async (
+export const sendKeys = async (
     by,
     text,
 ) => retryWithElement(
@@ -78,6 +78,26 @@ export const setText = async (
     },
 );
 
+/**
+ * Sends keys to a WebElement in the DOM given a Locator one at a time
+ * @param {Locator[]} by The Locator Array that points to the WebElement
+ * @param {string} text The text to set
+ * @returns {Promise<void>}
+ */
+export const sendKeysOneAtATime = async (
+    by,
+    text,
+) => retryWithElement(
+    by,
+    async (element) => {
+        const el = ensureIsWebElement(element);
+        await el.clear();
+        const textArray = text.split('');
+        for (let i = 0; i < textArray.length; i += 1) {
+            await el.sendKeys(textArray[i]);
+        }
+    },
+);
 /**
  * Retrieves the text from a WebElement given a Locator
  *
