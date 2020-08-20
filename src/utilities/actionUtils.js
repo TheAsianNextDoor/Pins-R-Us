@@ -43,12 +43,11 @@ export const scrollIntoViewIfNeeded = async (webElement) => {
  * @param {Locator[]} by The Locator Array that points to the WebElement
  * @returns {Promise<void>}
  */
-export const click = async (by) => retryWithElement(
+export const click = async (by) => retryWithElement({
     by,
-    async (element) => {
+    retryFunc: async (element) => {
         const el = ensureIsWebElement(element);
         const actions = getActions();
-        await scrollIntoViewIfNeeded(el);
         await actions
             .move({
                 x: 0,
@@ -58,7 +57,7 @@ export const click = async (by) => retryWithElement(
             .click(el)
             .perform();
     },
-);
+});
 
 /**
  * Sends keys to a WebElement in the DOM given a Locator
@@ -66,20 +65,21 @@ export const click = async (by) => retryWithElement(
  * @param {string} text The text to set
  * @returns {Promise<void>}
  */
-export const sendKeys = async (
+export const sendKeysToElement = async (
     by,
     text,
-) => retryWithElement(
+) => retryWithElement({
     by,
-    async (element) => {
+    retryFunc: async (element) => {
         const el = ensureIsWebElement(element);
         await el.clear();
         await el.sendKeys(text);
     },
-);
+});
 
 /**
- * Sends keys to a WebElement in the DOM given a Locator one at a time
+ * Sends keys to a WebElement in the DOM given a Locator one at a time with a pause in between
+ * Some Browser inputs have a difficult time processing keys sent all at once
  * @param {Locator[]} by The Locator Array that points to the WebElement
  * @param {string} text The text to set
  * @returns {Promise<void>}
@@ -87,37 +87,39 @@ export const sendKeys = async (
 export const sendKeysOneAtATime = async (
     by,
     text,
-) => retryWithElement(
+) => retryWithElement({
     by,
-    async (element) => {
+    retryFunc: async (element) => {
         const el = ensureIsWebElement(element);
         await el.clear();
         const textArray = text.split('');
         for (let i = 0; i < textArray.length; i += 1) {
             await el.sendKeys(textArray[i]);
+            await wait(25);
         }
     },
-);
+});
+
 /**
  * Retrieves the text from a WebElement given a Locator
  *
  * @param {Locator[]} by The Locator Array to find the WebElement
  * @returns {Promise<string>}
  */
-export const getText = async (by) => retryWithElement(
+export const getText = async (by) => retryWithElement({
     by,
-    async (element) => {
+    retryFunc: async (element) => {
         const el = ensureIsWebElement(element);
         return el.getText();
     },
-);
+});
 
 export const setValue = async (
     by,
     value,
-) => retryWithElement(
+) => retryWithElement({
     by,
-    async (element) => {
+    retryFunc: async (element) => {
         const el = ensureIsWebElement(element);
         const driver = getDriver();
         await driver.executeScript(
@@ -129,7 +131,7 @@ export const setValue = async (
         );
         await wait(25);
     },
-);
+});
 
 /**
  * Retrieves the value attribute from a WebElement given a Locator
@@ -137,13 +139,13 @@ export const setValue = async (
  * @param {Locator[]} by The Locator Array to find the WebElement
  * @returns {Promise<string>}
  */
-export const getValue = async (by) => retryWithElement(
+export const getValue = async (by) => retryWithElement({
     by,
-    async (element) => {
+    retryFunc: async (element) => {
         const el = ensureIsWebElement(element);
         return el.getAttribute('value');
     },
-);
+});
 
 /**
  * Natively presses the ENTER key
@@ -164,5 +166,18 @@ export const pressTab = async () => {
     const actions = getActions();
     await actions
         .sendKeys(Key.TAB)
+        .perform();
+};
+
+/**
+ * Sends keys to a WebElement in the DOM given a Locator
+ * @param {Locator[]} by The Locator Array that points to the WebElement
+ * @param {string} text The text to set
+ * @returns {Promise<void>}
+ */
+export const sendKeysNatively = async (text) => {
+    const actions = getActions();
+    await actions
+        .sendKeys(text)
         .perform();
 };

@@ -1,7 +1,18 @@
 import retry from 'async-retry';
 import boxen from 'boxen';
-import { locateElement } from './elementUtils';
-import { switchToDefaultFrame } from './frameUtils';
+import { getBooleanEnvVariable } from '../environmentVariables';
+import {
+    getElementDescription,
+    locateElement,
+} from './elementUtils';
+import {
+    getInFrame,
+    switchToDefaultFrame,
+} from './frameUtils';
+
+// environment variables
+const shouldTraceLog = getBooleanEnvVariable('shouldTraceLog');
+const shouldBasicRetry = getBooleanEnvVariable('shouldBasicRetry');
 
 /**
  * A special variable to track if an error was thrown in retry loops
@@ -64,17 +75,18 @@ const retryConfig = (onRetryFunc) => ({
 });
 
 /**
- * Asynchronously retries a function by locating the WebElement from a Locator and
- * passing it to the function
+ * Asynchronously retries a function by locating the WebElement from a locator array and
+ * passing it to the function for it to consume
  * @param {Locator[]} by The Locator to find the WebElement
  * @param {Function} retryFunc The function to retry
  * @param {Function} [onRetryFunc] The function to execute upon each retry
  * @returns {Promise<*>}
  */
-export const retryWithElement = async (
+export const retryWithElement = async ({
     by,
     retryFunc,
     onRetryFunc = () => {},
+} = {},
 ) => retry(
     async (bail, iteration) => {
         if (
@@ -83,9 +95,22 @@ export const retryWithElement = async (
         ) {
             bail(new Error(`Must pass a valid Locator Array to retryWithElement, passed:${by}`));
         }
-        await switchToDefaultFrame();
+        if (getInFrame()) {
+            await switchToDefaultFrame();
+        }
         const element = await locateElement(by);
-        return retryFunc(element, bail, iteration);
+        if (shouldTraceLog) {
+            console.log(JSON.stringify(
+                await getElementDescription(element),
+                null,
+                4,
+            ));
+        }
+        return retryFunc(
+            element,
+            bail,
+            iteration,
+        );
     },
     retryConfig(onRetryFunc),
 ).catch((e) => {
@@ -102,10 +127,15 @@ export const retryWithElement = async (
 export const basicRetry = async (
     retryFunc,
     onRetryFunc = () => {},
-) => retry(
-    async (bail, iteration) => retryFunc(bail, iteration),
-    retryConfig(onRetryFunc),
-).catch((e) => {
-    setRetryError(formatRetryErrorStack(e, 'THREW FROM WITHIN basicRetry'));
-    throw new Error(`Threw from basicRetry - ${e}`);
-});
+) => {
+    if (shouldBasicRetry) {
+        return retry(
+            async (bail, iteration) => retryFunc(bail, iteration),
+            retryConfig(onRetryFunc),
+        ).catch((e) => {
+            setRetryError(formatRetryErrorStack(e, 'THREW FROM WITHIN basicRetry'));
+            throw new Error(`Threw from basicRetry - ${e}`);
+        });
+    }
+    return retryFunc();
+};
