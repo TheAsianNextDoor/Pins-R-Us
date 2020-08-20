@@ -1,13 +1,13 @@
-import { basicRetry } from '../utilities/retryUtils';
 import {
-    getValue,
     click,
+    getValue,
     setValue,
 } from '../utilities/actionUtils';
 import {
-    by,
     addBys,
+    by,
 } from '../utilities/byUtils';
+import { basicRetry } from '../utilities/retryUtils';
 
 export default class Select {
     constructor(rootBy) {
