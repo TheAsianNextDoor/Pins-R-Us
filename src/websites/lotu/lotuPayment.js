@@ -1,12 +1,12 @@
+import Button from '../../controls/button';
+import Input from '../../controls/input';
 import {
+    addBys,
+    ancestorAtPosition,
     by,
     containsNormalizedClass,
     containsNormalizedText,
-    ancestorAtPosition,
-    addBys,
 } from '../../utilities/byUtils';
-import Input from '../../controls/input';
-import Button from '../../controls/button';
 
 export default class LotuPayment {
     constructor() {
@@ -20,21 +20,20 @@ export default class LotuPayment {
             containsNormalizedClass('review-block__content')
         } and @data-review-section = 'shipping-cost']`);
 
-        this.cardIframeBy = by.className('card-fields-iframe');
         this.cardNumberBy = addBys(
-            this.cardIframeBy,
+            by.className('card-fields-iframe', 0),
             by.id('number'),
         );
         this.cardNameOnBy = addBys(
-            this.cardIframeBy,
+            by.className('card-fields-iframe', 1),
             by.id('name'),
         );
         this.cardExpirationDateBy = addBys(
-            this.cardIframeBy,
+            by.className('card-fields-iframe', 2),
             by.id('expiry'),
         );
         this.cardSecurityCodeBy = addBys(
-            this.cardIframeBy,
+            by.className('card-fields-iframe', 3),
             by.id('verification_value'),
         );
 

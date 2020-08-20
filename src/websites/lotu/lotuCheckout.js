@@ -41,7 +41,7 @@ export default class LotuCheckout {
         await this.lastName.sendKeys(lastName);
         await this.address.sendKeys(address);
         await this.city.sendKeys(city);
-        await this.state.setValue(state);
+        await this.state.sendKeysNatively(state);
         await this.zip.sendKeysAndTabOff(zip);
         await this.continueToShippingButton.click();
         return new LotuShipping();
