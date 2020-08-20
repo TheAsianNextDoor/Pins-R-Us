@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import Locator, {
+import {
     until,
     // eslint-disable-next-line no-unused-vars
     WebElement,

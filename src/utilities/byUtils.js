@@ -22,13 +22,23 @@ export const ancestorAtPosition = (nodeType, position) => `ancestor-or-self::${
 }]`;
 
 /**
- * Creates an xpath subsection for matching normalized text()
+ * Creates an xpath subsection for matching normalized value
  *
  * @param {string} partialText The text to partially match
  * @returns {string}
  */
 export const containsNormalizedText = (partialText) =>
     `contains(normalize-space(text()), normalize-space('${partialText}'))`;
+
+
+/**
+ * Creates an xpath subsection for matching normalized text()
+ *
+ * @param {string} partialText The text to partially match
+ * @returns {string}
+ */
+export const containsNormalizedValue = (partialText) =>
+    `contains(normalize-space(@value), normalize-space('${partialText}'))`;
 
 /**
  * Creates an xpath subsection for matching normalized class
@@ -115,17 +125,56 @@ export const textMatchesNormalizedQuotes = (str) => `normalize-space(text()) = c
 }, '')`;
 
 /**
+ * Appends a position key onto the Selenium Locator Object
+ * The position value is used to determine which WebElement to grab when
+ * parsing the DOM
+ * @param {Locator} originalObject The Selenium Locator to append to
+ * @param {number} [position = 0] Which WebElement index in the findElements array you wish to set to root
+ * @see elementUtils.locateElements()
+ * @returns {Object}
+ */
+const addPositionKey = (
+    originalObject,
+    position = 0,
+) => ({
+    ...originalObject,
+    position,
+});
+
+/**
  * Enumeration for Selenium element locators
  * All inputs are of type string
- * Wraps Locator in an array to be parsed later
+ * Wraps Locator in an array and adds a position key
+ * Disclaimer: In the future be wary of Selenium module adding position key and overwriting ours
  * @returns {Locator}
  */
 export const by = {
-    id: (id) => [By.id(id)],
-    css: (cssSelector) => [By.css(cssSelector)],
-    xpath: (xpath) => [By.xpath(xpath)],
-    name: (name) => [By.name(name)],
-    className: (className) => [By.className(className)],
-    linkText: (linkText) => [By.linkText(linkText)],
-    partialLinkText: (partialLinkText) => [By.partialLinkText(partialLinkText)],
+    id: (id, position) => [addPositionKey(
+        By.id(id),
+        position,
+    )],
+    css: (cssSelector, position) => [addPositionKey(
+        By.css(cssSelector),
+        position,
+    )],
+    xpath: (xpath, position) => [addPositionKey(
+        By.xpath(xpath),
+        position,
+    )],
+    name: (name, position) => [addPositionKey(
+        By.name(name),
+        position,
+    )],
+    className: (className, position) => [addPositionKey(
+        By.className(className),
+        position,
+    )],
+    linkText: (linkText, position) => [addPositionKey(
+        By.linkText(linkText),
+        position,
+    )],
+    partialLinkText: (partialLinkText, position) => [addPositionKey(
+        By.partialLinkText(partialLinkText),
+        position,
+    )],
 };
