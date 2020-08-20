@@ -9,6 +9,37 @@ const SINGLE_REPLACEMENT = `", "${STRINGS.SINGLE_QUOTE}", "`;
 const DOUBLE_REPLACEMENT = `", '${STRINGS.DOUBLE_QUOTE}', "`;
 
 /**
+ * Creates an xpath subsection for finding an ancestor at a given position
+ *
+ * @param {string} nodeType The node type to search for
+ * @param {number} position The node position starting at index 1 from root to top of dom
+ * @returns {string}
+ */
+export const ancestorAtPosition = (nodeType, position) => `ancestor-or-self::${
+    nodeType
+}[position()=${
+    position.toString()
+}]`;
+
+/**
+ * Creates an xpath subsection for matching normalized text()
+ *
+ * @param {string} partialText The text to partially match
+ * @returns {string}
+ */
+export const containsNormalizedText = (partialText) =>
+    `contains(normalize-space(text()), normalize-space('${partialText}'))`;
+
+/**
+ * Creates an xpath subsection for matching normalized class
+ *
+ * @param {string} partialText The class to partially match
+ * @returns {string}
+ */
+export const containsNormalizedClass = (partialClass) =>
+    `contains(normalize-space(@class), normalize-space('${partialClass}'))`;
+
+/**
  * Ensures the locator is of type xpath
  * @param {By} locator The locator to check
  */
