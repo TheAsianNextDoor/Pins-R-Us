@@ -33,6 +33,7 @@
           "allowAllPropertiesOnSameLine": false
         }],
         "semi": "error",
+        "implicit-arrow-linebreak": "off",
         "curly": [
           "error",
           "all"
