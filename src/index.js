@@ -1,14 +1,25 @@
 import { initializeDriver } from './driver';
-import LotuCollections from './websites/lotuCollections';
+import LotuCollections from './websites/lotu/lotuCollections';
+import { getRetryError } from './utilities/retryUtils';
 
 const creds = require('../credentials.json');
 
 const lotuCollections = new LotuCollections();
 
-(async () => {
+const executeScript = async () => {
     await initializeDriver();
     await lotuCollections.navTo();
     const lotuPinPage = await lotuCollections.clickTileLinkByName(`"Peyotero" 3D 2 Piece Hat Pin Sets`);
     const lotuCheckout = await lotuPinPage.clickBuyButton();
-    await lotuCheckout.expressCheckout(creds.user1);
-})().catch((e) => { throw new Error(e); });
+    const lotuShipping = await lotuCheckout.expressCheckout(creds.user1);
+    const lotuPayment = await lotuShipping.clickContinueToPayment();
+    await lotuPayment.expressPay(creds.user1);
+};
+
+executeScript().catch((e) => {
+    const retryError = getRetryError();
+    if (retryError) {
+        console.log(retryError);
+    }
+    console.log(`Root error: ${e}`);
+});
