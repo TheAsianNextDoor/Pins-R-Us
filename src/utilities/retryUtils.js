@@ -1,5 +1,6 @@
 import retry from 'async-retry';
 import boxen from 'boxen';
+import chalk from 'chalk';
 import { getBooleanEnvVariable } from '../environmentVariables';
 import {
     getElementDescription,
@@ -36,6 +37,17 @@ export const getRetryError = () => retryError;
 const setRetryError = (error) => { retryError = error; };
 
 /**
+ * Configuration for boxen
+ */
+const boxenConfig = {
+    borderStyle: 'bold',
+    padding: 1,
+    margin: 1,
+    align: 'center',
+    borderColor: 'red',
+};
+
+/**
  * Formats an error stack with boxen
  *
  * @param {Error} error The error to format
@@ -44,21 +56,17 @@ const setRetryError = (error) => { retryError = error; };
  */
 const formatRetryErrorStack = (error, message) => {
     const formattedError = error;
-    formattedError.stack = `\n\n${
+    formattedError.stack = `${
         boxen(
-            `\n  ${message}  \n`,
-            {
-                borderStyle: 'double',
-            },
+            `${chalk.bold.magenta(message)}`,
+            boxenConfig,
         )
-    }\n\n${error.stack}\n\n${
+    }\n${chalk.red(error.stack)}\n${
         boxen(
-            `\n  ${message}  \n`,
-            {
-                borderStyle: 'double',
-            },
+            `${chalk.bold.magenta(message)}`,
+            boxenConfig,
         )
-    }\n\n`;
+    }`;
     return formattedError;
 };
 
@@ -100,11 +108,11 @@ export const retryWithElement = async ({
         }
         const element = await locateElement(by);
         if (shouldTraceLog) {
-            console.log(JSON.stringify(
+            console.log(chalk.dim.yellow(JSON.stringify(
                 await getElementDescription(element),
                 null,
                 4,
-            ));
+            )));
         }
         return retryFunc(
             element,

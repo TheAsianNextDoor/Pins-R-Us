@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { initializeDriver } from './driver';
 import LotuCollections from './websites/lotu/lotuCollections';
 import { getRetryError } from './utilities/retryUtils';
@@ -21,5 +22,5 @@ executeScript().catch((e) => {
     if (retryError) {
         console.log(retryError);
     }
-    console.log(`Root error: ${e}`);
+    console.log(`Root error: ${chalk.red(e)}`);
 });
