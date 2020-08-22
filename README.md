@@ -9,3 +9,5 @@ Setup:
   
 Run:
   1. execute command - `npm run buy -w "lotu" -dt "[valid JS Date in the future]"`
+  
+Example Date: 'August 22, 2020 01:37:40'
