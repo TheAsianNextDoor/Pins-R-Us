@@ -8,4 +8,4 @@ Setup:
   3. execute command: `npm install` (downloading dependencies)
   
 Run:
-  1. execute command - `npm run index`
+  1. execute command - `npm run buy -w "lotu" -dt "[valid JS Date in the future]"`
