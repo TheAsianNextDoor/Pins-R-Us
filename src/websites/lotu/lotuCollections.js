@@ -3,7 +3,7 @@ import {
     addBys,
     ancestorAtPosition,
     by,
-    textMatchesNormalizedQuotes,
+    textContainsNormalizedQuotes,
 } from '../../utilities/byUtils';
 import { navToURL } from '../../utilities/navigationUtils';
 import LotuPinPage from './lotuPinPage';
@@ -17,7 +17,7 @@ export default class LotuCollections {
     getTileLinkByFromName = (name) => addBys(
         this.collectionBy,
         by.xpath(`.//span[${
-            textMatchesNormalizedQuotes(name)
+            textContainsNormalizedQuotes(name)
         }]/${
             ancestorAtPosition('a', 1)
         }`),
