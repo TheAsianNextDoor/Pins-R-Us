@@ -105,15 +105,24 @@ export const executePurchase = {
  * @param {Object} options Commander options
  * @returns {void}
  */
-export const preCheck = (options) => {
+export const preCheckOptions = (options) => {
     const {
         dateTime, now, website,
     } = options;
+
+    // if no dateTime or now option passed in
     if (!dateTime && !now) {
-        console.log(`${chalk.redBright('\nMust pass in either dateTime or \'now\' flag')}\n`);
+        console.log(`${chalk.redBright('\nMust pass in either dateTime or \'now\' flag. Did not pass either')}\n`);
         exit(0);
     }
 
+    // if dateTime and now option passed in
+    if (dateTime && now) {
+        console.log(`${chalk.redBright('\nMust pass in either dateTime or \'now\' flag. Passed in both')}\n`);
+        exit(0);
+    }
+
+    // Ensure datTime is in iso 8601 format and in the future if passed
     if (dateTime) {
         const parsedMoment = parseMoment(dateTime);
         ensureFutureMoment(parsedMoment);

@@ -3,7 +3,7 @@ import commander from 'commander';
 import moment from 'moment';
 import {
     executePurchase,
-    preCheck,
+    preCheckOptions,
 } from './buyHelperFunctions';
 import { initializeDriver } from './driver';
 import { scheduleAsyncFunction } from './utilities/scheduleUtils';
@@ -31,8 +31,10 @@ commander
     .parse(process.argv);
 
 
-preCheck(commander.opts());
-const parsedMoment = moment(commander.dateTime);
+preCheckOptions(commander.opts());
+
+// parse into moment and then convert into JS Date Object for scheduleAsyncFunction
+const parsedDateTime = moment(commander.dateTime).toDate();
 
 // Message to warn user to double check values
 console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${JSON.stringify(commander.opts(), null, 4)}`);
@@ -44,7 +46,7 @@ console.log(`\nIf they are not correct, kill script with command: ${chalk.cyan('
     if (commander.dateTime) {
         scheduleAsyncFunction(
             async () => executePurchase[commander.website](config),
-            parsedMoment.toDate(),
+            parsedDateTime,
         );
     } else if (commander.now) {
         await executePurchase[commander.website](config);

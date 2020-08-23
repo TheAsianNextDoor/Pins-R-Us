@@ -71,13 +71,20 @@ File location: **./src/config.json**
 ## Execution
 
 **Commander options:**
+
 - **-w**, **--website [website]** | (required) Which website to purchase on, expects string
 - **-n**, **--now** | Execute script immediately, flag variable
 - **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format
 - **-pn**, **-purchase-number [purchaseNumber]** | Number of times to purchase, expects number
 
+*Must pass in either --now or --date-time, not both*
+
 **Examples:**
 
-Scheduled script: `npm run buy -- -w "lotu" -date-time "2020-08-23 14:04:30"` 
+ - Scheduled script: 
+   - `npm run buy -- -w "lotu" --date-time "2020-08-23 14:04:30"` 
+   - `npm run buy -- --website "lotu" -dt "2020-08-23 14:04:30"`
 
-Immediate script: `npm run buy -- --website "lotu" -n`
+- Immediate script: 
+  - `npm run buy -- --website "lotu" -n`
+  - `npm run buy -- -w "lotu" --now`
