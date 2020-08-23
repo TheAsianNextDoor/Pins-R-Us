@@ -62,7 +62,7 @@ File location: **./src/config.json**
 
 ## Supported Websites
 
- 1. [lotu](https://www.lotucreations.com/collections/hat-pins)
+ 1. [Lotu](https://www.lotucreations.com/collections/hat-pins)
  2. Pookster
  3. Artistry
 
@@ -71,10 +71,10 @@ File location: **./src/config.json**
 ## Execution
 
 **Commander options:**
-- -w, --website [website] | (required) Which website to purchase on, expects string
-- -n, --now | Execute script immediately, flag variable
-- -d, --date-time [dateTime] | Execute script at given date time, expects iso 8601 format
-- -pn, -purchase-number [purchaseNumber] | Number of times to purchase, expects number
+- **-w**, **--website [website]** | (required) Which website to purchase on, expects string
+- **-n**, **--now** | Execute script immediately, flag variable
+- **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format
+- **-pn**, **-purchase-number [purchaseNumber]** | Number of times to purchase, expects number
 
 **Examples:**
 
