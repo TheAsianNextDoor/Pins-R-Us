@@ -45,18 +45,18 @@ Npm modules utilized:
 ## Config
 File location: **./src/config.json**
 
-- item - name of item to purchase (must escape all quotations with ' \\' character)
-- email - email to purchase item with  
-- firstName - first name of purchaser
-- lastName - last name of purchaser
-- address - address to ship to
-- city - city to ship to
-- state - state to ship to
-- zip - zip to ship to
-- cardNumber - card to use for purchase
-- cardNameOn - the name on the card
-- cardExpirationDate - the expiration date of the card
-- cardSecurityCode - the security code of the card
+- **item** - name of item to purchase (must escape all quotations with ' \\' character)
+- **email** - email to purchase item with  
+- **firstName** - first name of purchaser
+- **lastName** - last name of purchaser
+- **address** - address to ship to
+- **city** - city to ship to
+- **state** - state to ship to
+- **zip** - zip to ship to
+- **cardNumber** - card to use for purchase
+- **cardNameOn** - the name on the card
+- **cardExpirationDate** - the expiration date of the card
+- **cardSecurityCode** - the security code of the card
 
 <br>
 
@@ -71,7 +71,7 @@ File location: **./src/config.json**
 ## Execution
 
 **Commander options:**
-- -w, --website [website] (required) | Which website to purchase on, expects string
+- -w, --website [website] | (required) Which website to purchase on, expects string
 - -n, --now | Execute script immediately, flag variable
 - -d, --date-time [dateTime] | Execute script at given date time, expects iso 8601 format
 - -pn, -purchase-number [purchaseNumber] | Number of times to purchase, expects number
@@ -79,4 +79,5 @@ File location: **./src/config.json**
 **Examples:**
 
 Scheduled script: `npm run buy -- -w "lotu" -date-time "2020-08-23 14:04:30"` 
+
 Immediate script: `npm run buy -- --website "lotu" -n`
