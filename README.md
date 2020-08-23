@@ -8,6 +8,9 @@ Setup:
   3. execute command: `npm install` (downloading dependencies)
   
 Run:
-  1. execute command - `npm run buy -w "lotu" -dt "[valid JS Date in the future]"`
+<br>
+Schedule script to run in future: `npm run buy -w "lotu" -dt "[ISO 8601 Date Time]"`
+<br>
+Example ISO 8601: '2020-08-23 14:04:30'
   
-Example Date: 'August 22, 2020 01:37:40'
+Schedule script to run immediatly: `npm run buy -w "lotu" -n`
