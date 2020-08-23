@@ -1,13 +1,12 @@
 import chalk from 'chalk';
 import commander from 'commander';
-import { exit } from 'process';
+import moment from 'moment';
 import {
     executePurchase,
-    supportedWebsites,
+    preCheck,
 } from './buyHelperFunctions';
-import { scheduleAsyncFunction } from './utilities/scheduleUtils';
 import { initializeDriver } from './driver';
-import { isValidDate } from './utilities/dateUtils';
+import { scheduleAsyncFunction } from './utilities/scheduleUtils';
 
 const config = require('./config.json');
 
@@ -17,36 +16,37 @@ commander
         '-w, --website <website>',
         'The website to execute the purchase on',
     )
-    .requiredOption(
+    .option(
         '-dt, --date-time <dateTime>',
         'The date and time to start running the script',
     )
     .option(
-        '-n, -purchaseNumber <number>',
+        '-pn, -purchase-number <number>',
         'Number of times to purchase item',
+    )
+    .option(
+        '-n, --now',
+        'If true executes buy immediately',
     )
     .parse(process.argv);
 
 
-const parsedDate = new Date(commander.dateTime);
-if (!isValidDate(parsedDate)) {
-    console.log('Exiting Script\n');
-    exit(0);
-}
-if (!supportedWebsites.some((site) => site === commander.website)) {
-    console.log(`'${commander.website}' IS NOT A SUPPORTED WEBSITE\
-    \nPlease enter one of the following: ${supportedWebsites}\
-    \nExiting Script\n`);
-    exit(0);
-}
+preCheck(commander.opts());
+const parsedMoment = moment(commander.dateTime);
 
+// Message to warn user to double check values
 console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${JSON.stringify(commander.opts(), null, 4)}`);
 console.log(`\nIf they are not correct, kill script with command: ${chalk.cyan('ctrl + c')}`);
 
 (async () => {
     await initializeDriver();
-    scheduleAsyncFunction(
-        async () => executePurchase[commander.website](config),
-        commander.dateTime,
-    );
+
+    if (commander.dateTime) {
+        scheduleAsyncFunction(
+            async () => executePurchase[commander.website](config),
+            parsedMoment.toDate(),
+        );
+    } else if (commander.now) {
+        await executePurchase[commander.website](config);
+    }
 })();

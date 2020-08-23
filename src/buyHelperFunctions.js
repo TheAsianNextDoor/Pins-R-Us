@@ -2,6 +2,10 @@ import chalk from 'chalk';
 import readline from 'readline';
 import { exit } from 'process';
 import LotuCollections from './websites/lotu/lotuCollections';
+import {
+    parseMoment,
+    ensureFutureMoment,
+} from './utilities/dateUtils';
 
 /**
  * List of supported websites
@@ -16,6 +20,20 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
 });
+
+/**
+ * Ensures that the website is on the supported list
+ *
+ * @param {string} website The website to buy something from
+ */
+export const ensureSupportedWebsite = (website) => {
+    if (!supportedWebsites.some((site) => site === website)) {
+        console.log(`\n'${website}' ${chalk.redBright('IS NOT A SUPPORTED WEBSITE')}\
+        \nPlease enter one of the following: ${supportedWebsites}\
+        \nExiting Script\n`);
+        exit(0);
+    }
+};
 
 export const ensureDateIsCorrect = (passedDate) => {
     const finalQuestion = `Is this date correct? ${
@@ -36,6 +54,12 @@ export const ensureDateIsCorrect = (passedDate) => {
     });
 };
 
+/**
+ * Control flow for Lotu website checkout
+ *
+ * @param {Object} config Commander config
+ * @returns {void}
+ */
 const lotuPurchase = async (config) => {
     const lotuCollections = new LotuCollections();
     await lotuCollections.navTo();
@@ -46,16 +70,53 @@ const lotuPurchase = async (config) => {
     await lotuPayment.expressPay(config.user1);
 };
 
+/**
+ * Control flow for artistry website checkout
+ *
+ * @param {Object} config Commander config
+ * @returns {void}
+ */
 const artistryPurchase = async () => {
 
 };
 
+/**
+ * Control flow for pookster website checkout
+ *
+ * @param {Object} config Commander config
+ * @returns {void}
+ */
 const pooksterPurchase = async () => {
 
 };
 
+/**
+ * Enum for website purchase control flow
+ */
 export const executePurchase = {
     lotu: async (config) => lotuPurchase(config),
     artistry: async (config) => artistryPurchase(config),
     pookster: async (config) => pooksterPurchase(config),
+};
+
+/**
+ * Ensures that all commander values are valid
+ *
+ * @param {Object} options Commander options
+ * @returns {void}
+ */
+export const preCheck = (options) => {
+    const {
+        dateTime, now, website,
+    } = options;
+    if (!dateTime && !now) {
+        console.log(`${chalk.redBright('\nMust pass in either dateTime or \'now\' flag')}\n`);
+        exit(0);
+    }
+
+    if (dateTime) {
+        const parsedMoment = parseMoment(dateTime);
+        ensureFutureMoment(parsedMoment);
+    }
+    ensureSupportedWebsite(website);
 };
