@@ -155,31 +155,31 @@ export class ByArray extends Array {}
  * @returns {Locator}
  */
 export const by = {
-    id: (id, position) => ByArray(addPositionKey(
+    id: (id, position) => new ByArray(addPositionKey(
         By.id(id),
         position,
     )),
-    css: (cssSelector, position) => ByArray(addPositionKey(
+    css: (cssSelector, position) => new ByArray(addPositionKey(
         By.css(cssSelector),
         position,
     )),
-    xpath: (xpath, position) => ByArray(addPositionKey(
+    xpath: (xpath, position) => new ByArray(addPositionKey(
         By.xpath(xpath),
         position,
     )),
-    name: (name, position) => ByArray(addPositionKey(
+    name: (name, position) => new ByArray(addPositionKey(
         By.name(name),
         position,
     )),
-    className: (className, position) => ByArray(addPositionKey(
+    className: (className, position) => new ByArray(addPositionKey(
         By.className(className),
         position,
     )),
-    linkText: (linkText, position) => ByArray(addPositionKey(
+    linkText: (linkText, position) => new ByArray(addPositionKey(
         By.linkText(linkText),
         position,
     )),
-    partialLinkText: (partialLinkText, position) => ByArray(addPositionKey(
+    partialLinkText: (partialLinkText, position) => new ByArray(addPositionKey(
         By.partialLinkText(partialLinkText),
         position,
     )),

@@ -47,7 +47,7 @@ export const ensureIsWebElement = (item) => {
  */
 export const locateElements = async (byArray) => {
     if (
-        !(byArray instanceof Array)
+        !(byArray instanceof ByArray)
         || byArray.length < 1
     ) {
         throw new Error(`Must pass a valid Locator Array to retryWithElement, passed:${byArray}`);
