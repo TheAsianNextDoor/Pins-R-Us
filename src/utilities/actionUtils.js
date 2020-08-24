@@ -95,7 +95,7 @@ export const sendKeysOneAtATime = async (
         const textArray = text.split('');
         for (let i = 0; i < textArray.length; i += 1) {
             await el.sendKeys(textArray[i]);
-            await wait(25);
+            await wait(1);
         }
     },
 );
