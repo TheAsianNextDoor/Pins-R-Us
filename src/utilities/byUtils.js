@@ -142,6 +142,12 @@ const addPositionKey = (
 });
 
 /**
+ * Represents our custom Selector class that wraps Selenium Selectors in an array
+ * Also adds a position key to the By Object
+ */
+export class ByArray extends Array {}
+
+/**
  * Enumeration for Selenium element locators
  * All inputs are of type string
  * Wraps Locator in an array and adds a position key
@@ -149,32 +155,32 @@ const addPositionKey = (
  * @returns {Locator}
  */
 export const by = {
-    id: (id, position) => [addPositionKey(
+    id: (id, position) => ByArray(addPositionKey(
         By.id(id),
         position,
-    )],
-    css: (cssSelector, position) => [addPositionKey(
+    )),
+    css: (cssSelector, position) => ByArray(addPositionKey(
         By.css(cssSelector),
         position,
-    )],
-    xpath: (xpath, position) => [addPositionKey(
+    )),
+    xpath: (xpath, position) => ByArray(addPositionKey(
         By.xpath(xpath),
         position,
-    )],
-    name: (name, position) => [addPositionKey(
+    )),
+    name: (name, position) => ByArray(addPositionKey(
         By.name(name),
         position,
-    )],
-    className: (className, position) => [addPositionKey(
+    )),
+    className: (className, position) => ByArray(addPositionKey(
         By.className(className),
         position,
-    )],
-    linkText: (linkText, position) => [addPositionKey(
+    )),
+    linkText: (linkText, position) => ByArray(addPositionKey(
         By.linkText(linkText),
         position,
-    )],
-    partialLinkText: (partialLinkText, position) => [addPositionKey(
+    )),
+    partialLinkText: (partialLinkText, position) => ByArray(addPositionKey(
         By.partialLinkText(partialLinkText),
         position,
-    )],
+    )),
 };

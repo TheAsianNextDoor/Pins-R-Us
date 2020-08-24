@@ -104,13 +104,6 @@ export const retryWithElement = async (
     retryConfig,
 ) => retry(
     async (bail, iteration) => {
-        if (
-            !(by instanceof Array)
-            || by.length < 1
-        ) {
-            bail(new Error(`Must pass a valid Locator Array to retryWithElement, passed:${by}`));
-        }
-
         // if in iframe reset to base frame
         if (getCurrentlyInFrame()) {
             await switchToDefaultFrame();

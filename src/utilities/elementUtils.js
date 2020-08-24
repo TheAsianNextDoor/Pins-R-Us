@@ -1,14 +1,11 @@
-import {
-    // eslint-disable-next-line no-unused-vars
-    Locator,
-    // eslint-disable-next-line no-unused-vars
-    WebElement,
-} from 'selenium-webdriver';
+import { WebElement } from 'selenium-webdriver';
 import { NoSuchElementError } from 'selenium-webdriver/lib/error';
 import { getDriver } from '../driver';
 import { switchToFrame } from './frameUtils';
 import { stringifyObjectWithColor } from './stringUtils';
 import { getBooleanEnvVariable } from '../environmentVariables';
+// eslint-disable-next-line no-unused-vars
+import { ByArray } from './byUtils';
 
 // env vars
 const shouldTraceLog = getBooleanEnvVariable('shouldTraceLog');
@@ -42,20 +39,27 @@ export const ensureIsWebElement = (item) => {
 };
 
 /**
- * Locates multiple WebElements in the DOM by parsing locatorArray and setting
+ * Locates multiple WebElements in the DOM by parsing the byArray and setting
  * each element as it traverses as the new rootElement
  *
- * @param {Locator[]} locatorArray Array of Locators leading to WebElements
+ * @param {ByArray} byArray Array of Locators leading to WebElements
  * @returns {Promise<WebElement[]>}
  */
-export const locateElements = async (locatorArray) => {
+export const locateElements = async (byArray) => {
+    if (
+        !(byArray instanceof Array)
+        || byArray.length < 1
+    ) {
+        throw new Error(`Must pass a valid Locator Array to retryWithElement, passed:${byArray}`);
+    }
+
     // driver starts off as root element
     let rootElement = getDriver();
 
     // Loop through locator array setting each found WebElement as root
     // And continuing traversal from there
-    for (let i = 0; i < locatorArray.length; i += 1) {
-        const currentBy = locatorArray[i];
+    for (let i = 0; i < byArray.length; i += 1) {
+        const currentBy = byArray[i];
         let currentElement;
         const currentByPosition = currentBy.position;
 
@@ -77,7 +81,7 @@ export const locateElements = async (locatorArray) => {
         if (await currentElement.getTagName() === 'iframe') {
             await switchToFrame(currentElement);
             rootElement = getDriver();
-        } else if (i === locatorArray.length - 1) { // if last by, always find all paths
+        } else if (i === byArray.length - 1) { // if last by, always find all paths
             rootElement = await rootElement.findElements(currentBy);
         } else { // if not last by
             rootElement = currentElement;
@@ -90,11 +94,11 @@ export const locateElements = async (locatorArray) => {
  * Locates a single WebElements in the DOM by calling locateElements and
  * returning the first index
  *
- * @param {Locator[]} locatorArray Array of Locators leading to a single WebElement
+ * @param {ByArray} byArray Array of Locators leading to a single WebElement
  * @returns {Promise<WebElement>}
  */
-export const locateElement = async (locatorArray) => {
-    const elements = await locateElements(locatorArray);
+export const locateElement = async (byArray) => {
+    const elements = await locateElements(byArray);
     const result = (elements.length > 0) ? elements[0] : null;
 
     if (shouldTraceLog) {
