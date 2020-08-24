@@ -1,4 +1,3 @@
-import { click } from '../../utilities/actionUtils';
 import {
     addBys,
     ancestorAtPosition,
@@ -6,7 +5,8 @@ import {
     textContainsNormalizedQuotes,
 } from '../../utilities/byUtils';
 import { navToURL } from '../../utilities/navigationUtils';
-import LotuPinPage from './lotuPinPage';
+import LotuProduct from './lotuProduct';
+import Link from '../../controls/link';
 
 export default class LotuCollections {
     constructor() {
@@ -14,6 +14,22 @@ export default class LotuCollections {
         this.collectionBy = by.id('Collection');
     }
 
+    /**
+     * Navigates to the lotu collections page
+     *
+     * @returns {Promise<void>}
+     */
+    navTo = async () => {
+        await navToURL(this.url);
+        return new LotuCollections();
+    };
+
+    /**
+     * Retrieves the Selector Array of a tile given a name
+     *
+     * @param {String} name The name of the link to retrieve the by of
+     * @returns {Promise<By>}
+     */
     getTileLinkByFromName = (name) => addBys(
         this.collectionBy,
         by.xpath(`.//span[${
@@ -23,13 +39,22 @@ export default class LotuCollections {
         }`),
     );
 
-    clickTileLinkByName = async (name) => {
-        await click(this.getTileLinkByFromName(name));
-        return new LotuPinPage();
-    };
+    /**
+     * Retrieves a Link Control given a tile name
+     *
+     * @param {String} name The name of the link to retrieve the by of
+     */
+    getTileLinkFromName = (name) => new Link(this.getTileLinkByFromName(name));
 
-    navTo = async () => {
-        await navToURL(this.url);
-        return new LotuCollections();
+    /**
+     * Clicks a given tile by its name
+     *
+     * @param {String} name The name of the link to click
+     * @returns {Promise<LotuProduct>}
+     */
+    clickTileLinkByName = async (name) => {
+        const tileLink = this.getTileLinkFromName(name);
+        await tileLink.clickLink();
+        return new LotuProduct();
     };
 }

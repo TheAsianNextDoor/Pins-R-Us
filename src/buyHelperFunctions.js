@@ -6,6 +6,7 @@ import {
     parseMoment,
     ensureFutureMoment,
 } from './utilities/dateUtils';
+import ArtistryCollections from './websites/artistry/artistryCollections';
 
 /**
  * List of supported websites
@@ -57,27 +58,34 @@ export const ensureDateIsCorrect = (passedDate) => {
 /**
  * Control flow for Lotu website checkout
  *
- * @param {Object} config Commander config
+ * @param {Object} user Commander user option
  * @returns {void}
  */
-const lotuPurchase = async (config) => {
+const lotuPurchase = async (user) => {
     const lotuCollections = new LotuCollections();
     await lotuCollections.navTo();
-    const lotuPinPage = await lotuCollections.clickTileLinkByName(config.user1.item);
-    const lotuCheckout = await lotuPinPage.clickBuyButton();
-    const lotuShipping = await lotuCheckout.expressCheckout(config.user1);
-    const lotuPayment = await lotuShipping.clickContinueToPayment();
-    await lotuPayment.expressPay(config.user1);
+    const lotuProduct = await lotuCollections.clickTileLinkByName(user.item);
+    const shopifyInfo = await lotuProduct.clickBuyButton();
+    const shopifyShipping = await shopifyInfo.expressCheckout(user);
+    const shopifyPayment = await shopifyShipping.clickContinueToPayment();
+    await shopifyPayment.expressPay(user);
 };
 
 /**
  * Control flow for artistry website checkout
  *
- * @param {Object} config Commander config
+ * @param {Object} user Commander user option
  * @returns {void}
  */
-const artistryPurchase = async () => {
-
+const artistryPurchase = async (user) => {
+    const artistryCollections = new ArtistryCollections();
+    await artistryCollections.navTo();
+    const artistryProduct = await artistryCollections.clickTileByName(user.item);
+    const artistryShoppingCart = await artistryProduct.clickAddToCart();
+    const shopifyInfo = await artistryShoppingCart.clickCheckout();
+    const shopifyShipping = await shopifyInfo.expressCheckout(user);
+    const shopifyPayment = await shopifyShipping.clickContinueToPayment();
+    await shopifyPayment.expressPay(user);
 };
 
 /**
@@ -94,9 +102,9 @@ const pooksterPurchase = async () => {
  * Enum for website purchase control flow
  */
 export const executePurchase = {
-    lotu: async (config) => lotuPurchase(config),
-    artistry: async (config) => artistryPurchase(config),
-    pookster: async (config) => pooksterPurchase(config),
+    lotu: async (user) => lotuPurchase(user),
+    artistry: async (user) => artistryPurchase(user),
+    pookster: async (user) => pooksterPurchase(user),
 };
 
 /**

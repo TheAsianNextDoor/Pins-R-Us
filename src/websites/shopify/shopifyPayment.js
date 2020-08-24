@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import Button from '../../controls/button';
 import Input from '../../controls/input';
 import {
@@ -8,7 +9,7 @@ import {
     containsNormalizedText,
 } from '../../utilities/byUtils';
 
-export default class LotuPayment {
+export default class ShopifyPayment {
     constructor() {
         this.contactBy = by.xpath(`//div[${
             containsNormalizedClass('review-block__content')
@@ -63,6 +64,14 @@ export default class LotuPayment {
         cardExpirationDate,
         cardSecurityCode,
     }) => {
+        if (
+            !cardNumber
+            || !cardNameOn
+            || !cardExpirationDate
+            || !cardSecurityCode
+        ) {
+            throw new Error(chalk.redBright('Must pass in all payment fields, check config.js'));
+        }
         await this.cardNumber.sendKeysOneAtATime(cardNumber);
         await this.cardNameOn.sendKeysOneAtATime(cardNameOn);
         await this.cardExpirationDate.sendKeysOneAtATime(cardExpirationDate);
