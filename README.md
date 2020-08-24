@@ -8,6 +8,7 @@
 
 ## Table of contents
 
+  - [Prerequisites](#prerequisites)
   - [General Info](#general-info)
   - [Supported Websites](#supported-websites)
   - [Directory Information](#directory-information)
@@ -19,9 +20,15 @@
 <br>
 <br>
 
+## Prerequisites
+
+Chrome Browser
+
 ## General Info
 
-Automate the buying process for pins using Selenium Web Driver. Offers the ability to schedule the script to execute in the future or immediately.
+Automate the buying process for pins using Selenium Web Driver. Offers the ability to schedule the script to execute in the future or immediately. 
+
+The script will start a Chrome Browser and navigate to the specified website's offerings page and click the user defined item to purchase. Then it will proceed to checkout, input shipping information and payment information, and finally purchase the item.
 
 <br>
 
