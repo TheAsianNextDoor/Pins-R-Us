@@ -1,7 +1,7 @@
-import { config } from 'dotenv';
+import dotenvFlow from 'dotenv-flow';
 
-// reads env file and sets vars
-config();
+// reads env files and sets vars
+dotenvFlow.config();
 
 /**
  * Returns a string (lowerCase and trimmed) environment variable
