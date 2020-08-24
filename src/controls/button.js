@@ -1,4 +1,5 @@
 import { click } from '../utilities/actionUtils';
+import { waitUntilElementIsEnabled } from '../utilities/waitUntilUtils';
 
 export default class Button {
     constructor(rootBy) {
@@ -7,7 +8,13 @@ export default class Button {
 
     /**
      * Clicks button
+     *
      * @returns {Promise<void>}
      */
-    click = async () => click(this.rootBy);
+    click = async () => {
+        await waitUntilElementIsEnabled({
+            by: this.rootBy,
+        });
+        await click(this.rootBy);
+    };
 }
