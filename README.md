@@ -63,8 +63,8 @@ File location: **./src/config.js**
 ## Supported Websites
 
  1. [Lotu](https://www.lotucreations.com/collections/hat-pins)
- 2. Pookster
- 3. Artistry
+ 2. [Artistry](https://theartistrycollection.com/collections/2018)
+ 3. Pookster
 
 <br>
 
