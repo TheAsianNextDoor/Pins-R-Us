@@ -125,6 +125,13 @@ export const textMatchesNormalizedQuotes = (str) => `normalize-space(text()) = c
 }, '')`;
 
 /**
+ * Represents our custom Selector class
+ * Wraps Selenium Selectors in an array
+ * Adds a position key
+ * Disclaimer: In the future be wary of Selenium module adding position key and overwriting ours
+ */
+export class ByArray extends Array {
+/**
  * Appends a position key onto the Selenium Locator Object
  * The position value is used to determine which WebElement to grab when
  * parsing the DOM
@@ -133,53 +140,46 @@ export const textMatchesNormalizedQuotes = (str) => `normalize-space(text()) = c
  * @see elementUtils.locateElements()
  * @returns {Object}
  */
-const addPositionKey = (
-    originalObject,
-    position = 0,
-) => ({
-    ...originalObject,
-    position,
-});
-
-/**
- * Represents our custom Selector class that wraps Selenium Selectors in an array
- * Also adds a position key to the By Object
- */
-export class ByArray extends Array {}
+    static addPositionKey = (
+        originalObject,
+        position = 0,
+    ) => ({
+        ...originalObject,
+        position,
+    });
+}
 
 /**
  * Enumeration for Selenium element locators
  * All inputs are of type string
- * Wraps Locator in an array and adds a position key
- * Disclaimer: In the future be wary of Selenium module adding position key and overwriting ours
- * @returns {Locator}
+ * @returns {ByArray}
  */
 export const by = {
-    id: (id, position) => new ByArray(addPositionKey(
+    id: (id, position) => new ByArray(ByArray.addPositionKey(
         By.id(id),
         position,
     )),
-    css: (cssSelector, position) => new ByArray(addPositionKey(
+    css: (cssSelector, position) => new ByArray(ByArray.addPositionKey(
         By.css(cssSelector),
         position,
     )),
-    xpath: (xpath, position) => new ByArray(addPositionKey(
+    xpath: (xpath, position) => new ByArray(ByArray.addPositionKey(
         By.xpath(xpath),
         position,
     )),
-    name: (name, position) => new ByArray(addPositionKey(
+    name: (name, position) => new ByArray(ByArray.addPositionKey(
         By.name(name),
         position,
     )),
-    className: (className, position) => new ByArray(addPositionKey(
+    className: (className, position) => new ByArray(ByArray.addPositionKey(
         By.className(className),
         position,
     )),
-    linkText: (linkText, position) => new ByArray(addPositionKey(
+    linkText: (linkText, position) => new ByArray(ByArray.addPositionKey(
         By.linkText(linkText),
         position,
     )),
-    partialLinkText: (partialLinkText, position) => new ByArray(addPositionKey(
+    partialLinkText: (partialLinkText, position) => new ByArray(ByArray.addPositionKey(
         By.partialLinkText(partialLinkText),
         position,
     )),
