@@ -7,10 +7,11 @@ import {
     preCheckOptions,
 } from './buyHelperFunctions';
 import { initializeDriver } from './driver';
-import { scheduleAsyncFunction } from './utilities/scheduleUtils';
-import { getRetryError } from './utilities/retryUtils';
-
-const config = require('./config.json');
+import {
+    scheduleAsyncFunction,
+    executeAsyncFunction,
+} from './utilities/scheduleUtils';
+import { config } from './config';
 
 commander
     .description('Purchase an item from a website at a given date and time in the future')
@@ -18,13 +19,13 @@ commander
         '-w, --website <website>',
         'The website to execute the purchase on',
     )
+    .requiredOption(
+        '-u, --user <user>',
+        'Users to purchase item with',
+    )
     .option(
         '-dt, --date-time <dateTime>',
         'The date and time to start running the script',
-    )
-    .option(
-        '-pn, -purchase-number <number>',
-        'Number of times to purchase item',
     )
     .option(
         '-n, --now',
@@ -37,27 +38,23 @@ preCheckOptions(commander.opts());
 
 // parse into moment and then convert into JS Date Object for scheduleAsyncFunction
 const parsedDateTime = moment(commander.dateTime).toDate();
+const { user } = commander;
 
 // Message to warn user to double check values
 console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${JSON.stringify(commander.opts(), null, 4)}`);
 console.log(`\nIf they are not correct, kill script with command: ${chalk.cyan('ctrl + c')}`);
 
+
 (async () => {
     await initializeDriver();
 
     if (commander.dateTime) {
-        scheduleAsyncFunction(
-            async () => executePurchase[commander.website](config),
+        await scheduleAsyncFunction(
+            async () => executePurchase[commander.website](config[user]),
             parsedDateTime,
         );
+        exit(0);
     } else if (commander.now) {
-        await executePurchase[commander.website](config);
+        await executeAsyncFunction(async () => executePurchase[commander.website](config[user]));
     }
-})().catch((e) => {
-    const retryError = getRetryError();
-    if (retryError) {
-        console.log(retryError);
-    }
-    console.log(e);
-    exit(0);
-});
+})();
