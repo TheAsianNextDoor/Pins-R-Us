@@ -18,7 +18,6 @@
   - [Technologies](#technologies)
 
 <br>
-<br>
 
 ## Prerequisites
 
@@ -46,10 +45,10 @@ A brief descriptions of important *./src* directories and files:
 
 - **controls**
   - Representations of specific dom elements with interactive Selenium functions 
-  - If possible, attept to keep ussages of *actionUtils.js* in these files
+  - If possible, attempt to keep usages of *actionUtils.js* in these files
   
 - **websites**
-  - Contains the representations of each website's interactable dom elements
+  - Contains the interactable representations of each website's dom elements
   
 - **utilities**
   - actionUtils.js
@@ -66,7 +65,7 @@ A brief descriptions of important *./src* directories and files:
     - Functions that utilize Seleniums wait logic
   
 - **buyCommand.js**
-  - The root of execution. Recieves options, parses, and passes them through to control flow for each website
+  - The root of execution. Receives options, parses, and passes them through to control flow for each website
   
 - **buyHelperFunctions.js**
   - Control flow for each website
@@ -105,7 +104,7 @@ File location: **./src/config.js**
 
 - **-w**, **--website [website]** | (required) Which website to purchase on, expects string
 - **-u**, **--user [user]** | (required) Which user to purchase item with, expects string
-- **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format
+- **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format: *YYYY-MM-DD HH:mm:ss*
 - **-n**, **--now** | Execute script immediately, flag variable
 
 *Must pass in either --now or --date-time, not both*
