@@ -1,6 +1,5 @@
 import Button from '../../controls/button';
 import { by } from '../../utilities/byUtils';
-import ShopifyShipping from '../shopify/shopifyShipping';
 import ShopifyInformation from '../shopify/shopifyInformation';
 
 export default class LotuProduct {

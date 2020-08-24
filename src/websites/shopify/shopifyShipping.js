@@ -1,7 +1,6 @@
 import Button from '../../controls/button';
 import { by } from '../../utilities/byUtils';
 import ShopifyPayment from './shopifyPayment';
-import { wait } from '../../utilities/waitUtils';
 
 export default class ShopifyShipping {
     constructor() {
