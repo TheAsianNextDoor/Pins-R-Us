@@ -1,14 +1,20 @@
 # AutomatedPins
 
+<br>
+
+![SpongeBob Money Bags gif](images/readme/spongeBobMoneyBag.gif)
+
+<br>
+
 ## Table of contents
 
   - [General Info](#general-info)
   - [Supported Websites](#supported-websites)
-  - [Technologies](#technologies)
   - [Directory Information](#directory-information)
   - [Setup](#setup)
   - [Config](#config)
   - [Execution](#execution)
+  - [Technologies](#technologies)
 
 <br>
 <br>
@@ -24,23 +30,6 @@ Automate the buying process for pins using Selenium Web Driver. Offers the abili
  1. [Lotu](https://www.lotucreations.com/collections/hat-pins)
  2. [Artistry](https://theartistrycollection.com/collections/2018)
  3. Pookster
-
-<br>
-
-## Technologies
-
-Npm modules utilized:
-
-- [selenium-webdriver](https://www.npmjs.com/package/selenium-webdriver)
-- [babel](https://www.npmjs.com/package/Babel)
-- [eslint](https://www.npmjs.com/package/eslint)
-- [async-retry](https://www.npmjs.com/package/async-retry)
-- [commander](https://www.npmjs.com/package/commander)
-- [moment](https://www.npmjs.com/package/moment)
-- [node-schedule](https://www.npmjs.com/package/node-schedule)
-- [dotenv](https://www.npmjs.com/package/dotenv)
-- [boxen](https://www.npmjs.com/package/boxen)
-- [chalk](https://www.npmjs.com/package/chalk)
 
 <br>
 
@@ -76,7 +65,7 @@ A brief descriptions of important *./src* directories and files:
   - Control flow for each website
   - Misc parsing functions for *buyCommand.js*
   
-<br
+<br>
 
 ## Setup
   1. clone repo to local
@@ -123,3 +112,23 @@ File location: **./src/config.js**
 - Immediate script: 
   - `npm run buy -- --website "lotu" -n -u "user1"`
   - `npm run buy -- -w "artistry" --now --user "user2"`
+
+<br>
+
+## Technologies
+
+Javascript runtime environment - [Node.js](https://nodejs.org/en/)
+ 
+Npm modules utilized:
+- [selenium-webdriver](https://www.npmjs.com/package/selenium-webdriver)
+- [babel](https://www.npmjs.com/package/Babel)
+- [eslint](https://www.npmjs.com/package/eslint)
+- [async-retry](https://www.npmjs.com/package/async-retry)
+- [commander](https://www.npmjs.com/package/commander)
+- [moment](https://www.npmjs.com/package/moment)
+- [node-schedule](https://www.npmjs.com/package/node-schedule)
+- [dotenv](https://www.npmjs.com/package/dotenv)
+- [boxen](https://www.npmjs.com/package/boxen)
+- [chalk](https://www.npmjs.com/package/chalk)
+
+<br>
