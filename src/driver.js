@@ -8,6 +8,7 @@ import {
     // eslint-disable-next-line no-unused-vars
     WebElement,
 } from 'selenium-webdriver';
+import chrome from 'selenium-webdriver/chrome';
 
 
 /**
@@ -40,8 +41,17 @@ export const setDriver = (driver) => {
  * @returns {WebDriver}
  */
 export const initializeDriver = async () => {
-    const newDriver = new Builder().forBrowser('chrome').build();
-    await newDriver.manage().window().maximize();
+    const options = new chrome.Options()
+        .setPageLoadStrategy('eager')
+        .addArguments('start-maximized');
+    const service = new chrome.ServiceBuilder();
+    // service.loggingTo('')
+    const newDriver = new Builder()
+        .forBrowser('chrome')
+        .setChromeOptions(options)
+        .setChromeService(service)
+        .build();
+    // await newDriver.manage().window().maximize();
     setDriver(newDriver);
     return newDriver;
 };
