@@ -2,17 +2,13 @@ import retry from 'async-retry';
 import boxen from 'boxen';
 import chalk from 'chalk';
 import { getBooleanEnvVariable } from '../environmentVariables';
-import {
-    getElementDescription,
-    locateElement,
-} from './elementUtils';
+import { locateElement } from './elementUtils';
 import {
     getCurrentlyInFrame,
     switchToDefaultFrame,
 } from './frameUtils';
 
 // environment variables
-const shouldTraceLog = getBooleanEnvVariable('shouldTraceLog');
 const shouldBasicRetry = getBooleanEnvVariable('shouldBasicRetry');
 
 /**
@@ -114,17 +110,12 @@ export const retryWithElement = async (
         ) {
             bail(new Error(`Must pass a valid Locator Array to retryWithElement, passed:${by}`));
         }
+
+        // if in iframe reset to base frame
         if (getCurrentlyInFrame()) {
             await switchToDefaultFrame();
         }
         const element = await locateElement(by);
-        if (shouldTraceLog) {
-            console.log(chalk.dim.yellow(JSON.stringify(
-                await getElementDescription(element),
-                null,
-                4,
-            )));
-        }
         return retryFunc(
             element,
             bail,

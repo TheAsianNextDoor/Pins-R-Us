@@ -7,6 +7,11 @@ import {
 import { NoSuchElementError } from 'selenium-webdriver/lib/error';
 import { getDriver } from '../driver';
 import { switchToFrame } from './frameUtils';
+import { stringifyObjectWithColor } from './stringUtils';
+import { getBooleanEnvVariable } from '../environmentVariables';
+
+// env vars
+const shouldTraceLog = getBooleanEnvVariable('shouldTraceLog');
 
 /**
  * Builds an object containing element descriptors:
@@ -91,5 +96,13 @@ export const locateElements = async (locatorArray) => {
 export const locateElement = async (locatorArray) => {
     const elements = await locateElements(locatorArray);
     const result = (elements.length > 0) ? elements[0] : null;
+
+    if (shouldTraceLog) {
+        console.log(stringifyObjectWithColor(
+            await getElementDescription(result),
+            'yellow',
+        ));
+    }
+
     return result;
 };
