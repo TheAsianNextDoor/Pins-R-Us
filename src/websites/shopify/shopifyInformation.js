@@ -68,10 +68,10 @@ export default class ShopifyInformation {
             await this.email.sendKeys(email);
         }
 
-        await this.firstName.sendKeys(firstName);
-        await this.lastName.sendKeys(lastName);
-        await this.address.sendKeys(address);
-        await this.city.sendKeys(city);
+        await this.firstName.sendKeysAndTabOff(firstName);
+        await this.lastName.sendKeysAndTabOff(lastName);
+        await this.address.sendKeysAndTabOff(address);
+        await this.city.sendKeysAndTabOff(city);
         await this.state.sendKeysNatively(state);
         await this.zip.sendKeysAndTabOff(zip);
         await this.continueToShippingButton.click();

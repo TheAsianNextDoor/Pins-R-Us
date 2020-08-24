@@ -75,6 +75,23 @@ export default class Input {
     }
 
     /**
+     * Sends keys to the input one char at a time, waiting in between
+     *
+     * @param {string} text The string to send
+     * @returns {Promise<void>}
+     */
+    sendKeysOneAtATimeAndTabOff = async (text) => {
+        await basicRetry(async () => {
+            await sendKeysOneAtATime(this.rootBy, text);
+            await pressTab();
+            const actualText = await this.getValue();
+            if (text !== actualText) {
+                throw new Error(`Text Box text was not set correctly: ${text} was supposed to be ${actualText}`);
+            }
+        });
+    }
+
+    /**
      * Sets the value attribute of the input forcefully
      *
      * @param {String} value The string to set
