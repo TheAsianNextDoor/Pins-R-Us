@@ -43,7 +43,7 @@ Npm modules utilized:
 <br>
 
 ## Config
-File location: **./src/config.json**
+File location: **./src/config.js**
 
 - **item** - name of item to purchase (must escape all quotations with ' \\' character)
 - **email** - email to purchase item with  
@@ -73,18 +73,18 @@ File location: **./src/config.json**
 **Commander options:**
 
 - **-w**, **--website [website]** | (required) Which website to purchase on, expects string
-- **-n**, **--now** | Execute script immediately, flag variable
+- **-u**, **--user [user]** | (required) Which user to purchase item with, expects string
 - **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format
-- **-pn**, **-purchase-number [purchaseNumber]** | Number of times to purchase, expects number
+- **-n**, **--now** | Execute script immediately, flag variable
 
 *Must pass in either --now or --date-time, not both*
 
 **Examples:**
 
  - Scheduled script: 
-   - `npm run buy -- -w "lotu" --date-time "2020-08-23 14:04:30"` 
-   - `npm run buy -- --website "lotu" -dt "2020-08-23 14:04:30"`
+   - `npm run buy -- -w "lotu" --date-time "2020-08-23 14:04:30" -u "user1"` 
+   - `npm run buy -- --website "artistry" -dt "2020-08-23 14:04:30" --user "user2"`
 
 - Immediate script: 
-  - `npm run buy -- --website "lotu" -n`
-  - `npm run buy -- -w "lotu" --now`
+  - `npm run buy -- --website "lotu" -n -u "user1"`
+  - `npm run buy -- -w "artistry" --now --user "user2"`
