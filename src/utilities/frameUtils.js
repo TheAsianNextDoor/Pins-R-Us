@@ -11,7 +11,7 @@ let currentlyInFrame = false;
  *
  * @returns {boolean}
  */
-export const getInFrame = () => currentlyInFrame;
+export const getCurrentlyInFrame = () => currentlyInFrame;
 
 /**
  * Sets the currentlyInFrame variable to either true or false
@@ -19,7 +19,7 @@ export const getInFrame = () => currentlyInFrame;
  * @param {boolean} bool True = in an iFrame, false = root frame
  * @returns {void}
  */
-export const setInFrame = (bool) => { currentlyInFrame = bool; };
+export const setCurrentlyInFrame = (bool) => { currentlyInFrame = bool; };
 
 /**
  * Switches to default frame (most parent frame)
@@ -28,7 +28,7 @@ export const setInFrame = (bool) => { currentlyInFrame = bool; };
  */
 export const switchToDefaultFrame = async () => {
     await getDriver().switchTo().defaultContent();
-    setInFrame(false);
+    setCurrentlyInFrame(false);
     await wait(100);
 };
 
@@ -40,6 +40,6 @@ export const switchToDefaultFrame = async () => {
  */
 export const switchToFrame = async (frameElement) => {
     await getDriver().switchTo().frame(frameElement);
-    setInFrame(true);
+    setCurrentlyInFrame(true);
     await wait(100);
 };

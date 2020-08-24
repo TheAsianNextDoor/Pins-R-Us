@@ -4,6 +4,7 @@ import {
     // eslint-disable-next-line no-unused-vars
     WebElement,
 } from 'selenium-webdriver';
+import { NoSuchElementError } from 'selenium-webdriver/lib/error';
 import { getDriver } from '../driver';
 import { switchToFrame } from './frameUtils';
 
@@ -53,20 +54,23 @@ export const locateElements = async (locatorArray) => {
         let currentElement;
         const currentByPosition = currentBy.position;
 
-        // if position is 0 find first element
-        if (currentByPosition === 0) {
-            currentElement = await rootElement.findElement(currentBy);
-        } else {
-            currentElement = (await rootElement.findElements(currentBy))[currentByPosition];
+        try {
+            // if position is 0 find first element
+            if (currentByPosition === 0) {
+                currentElement = await rootElement.findElement(currentBy);
+            } else {
+                currentElement = (await rootElement.findElements(currentBy))[currentByPosition];
+            }
+        } catch (e) {
+            // handle NoSuchElementError specially
+            if (e instanceof NoSuchElementError) {
+                throw new Error(`Could not find WebElement using locator array:\n${
+                    JSON.stringify(locatorArray, null, 4)
+                }`);
+            }
+            throw new Error(e);
         }
 
-        if (!currentElement) {
-            throw new Error(`Unable to find WebElement with Locator Array:${
-                locatorArray
-            } and Position Array: ${
-                currentByPosition
-            }`);
-        }
         if (await currentElement.getTagName() === 'iframe') {
             await switchToFrame(currentElement);
             rootElement = getDriver();

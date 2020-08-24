@@ -1,12 +1,14 @@
 import chalk from 'chalk';
 import commander from 'commander';
 import moment from 'moment';
+import { exit } from 'process';
 import {
     executePurchase,
     preCheckOptions,
 } from './buyHelperFunctions';
 import { initializeDriver } from './driver';
 import { scheduleAsyncFunction } from './utilities/scheduleUtils';
+import { getRetryError } from './utilities/retryUtils';
 
 const config = require('./config.json');
 
@@ -51,4 +53,11 @@ console.log(`\nIf they are not correct, kill script with command: ${chalk.cyan('
     } else if (commander.now) {
         await executePurchase[commander.website](config);
     }
-})();
+})().catch((e) => {
+    const retryError = getRetryError();
+    if (retryError) {
+        console.log(retryError);
+    }
+    console.log(e);
+    exit(0);
+});

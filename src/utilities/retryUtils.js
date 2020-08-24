@@ -7,7 +7,7 @@ import {
     locateElement,
 } from './elementUtils';
 import {
-    getInFrame,
+    getCurrentlyInFrame,
     switchToDefaultFrame,
 } from './frameUtils';
 
@@ -20,6 +20,17 @@ const shouldBasicRetry = getBooleanEnvVariable('shouldBasicRetry');
  * Stack trace is unable to parse properly through anonymous functions
  */
 let retryError = null;
+
+/**
+ * Configuration for boxen
+ */
+const boxenConfig = {
+    borderStyle: 'bold',
+    padding: 1,
+    margin: 1,
+    align: 'center',
+    borderColor: 'red',
+};
 
 /**
  * Retrieves retry Error
@@ -35,17 +46,6 @@ export const getRetryError = () => retryError;
  * @returns {void}
  */
 const setRetryError = (error) => { retryError = error; };
-
-/**
- * Configuration for boxen
- */
-const boxenConfig = {
-    borderStyle: 'bold',
-    padding: 1,
-    margin: 1,
-    align: 'center',
-    borderColor: 'red',
-};
 
 /**
  * Formats an error stack with boxen
@@ -71,14 +71,26 @@ const formatRetryErrorStack = (error, message) => {
 };
 
 /**
- * The default retry config
- * @param {Function} onRetryFunc The function to execute upon each retry
+ * Returns a retry config
+ *
+ * @param {number} [retries = ] The number of total retries
+ * @param {number} [factor = 1] The factor to increase the wait between each retry
+ * @param {number} [minTimeout = 100] The first duration of time to wait between each retry in ms
+ * @param {number} [maxTimeout = 1000] THe maximum duration to wait in ms
+ * @param {Function} onRetryFunc The function to execute upon each
+ * @returns {Object}
  */
-const retryConfig = (onRetryFunc) => ({
-    retries: 100,
-    factor: 1,
-    minTimeout: 100,
-    maxTimeout: 10000,
+export const configurableRetryConfig = ({
+    retries = 100,
+    factor = 1,
+    minTimeout = 100,
+    maxTimeout = 100,
+    onRetryFunc = () => {},
+} = {}) => ({
+    retries,
+    factor,
+    minTimeout,
+    maxTimeout,
     onRetry: (error) => onRetryFunc(error),
 });
 
@@ -87,13 +99,13 @@ const retryConfig = (onRetryFunc) => ({
  * passing it to the function for it to consume
  * @param {Locator[]} by The Locator to find the WebElement
  * @param {Function} retryFunc The function to retry
- * @param {Function} [onRetryFunc] The function to execute upon each retry
+ * @param {Object} [retryConfig] The asyncRetry config object
  * @returns {Promise<*>}
  */
 export const retryWithElement = async ({
     by,
     retryFunc,
-    onRetryFunc = () => {},
+    retryConfig,
 } = {},
 ) => retry(
     async (bail, iteration) => {
@@ -103,7 +115,7 @@ export const retryWithElement = async ({
         ) {
             bail(new Error(`Must pass a valid Locator Array to retryWithElement, passed:${by}`));
         }
-        if (getInFrame()) {
+        if (getCurrentlyInFrame()) {
             await switchToDefaultFrame();
         }
         const element = await locateElement(by);
@@ -120,7 +132,7 @@ export const retryWithElement = async ({
             iteration,
         );
     },
-    retryConfig(onRetryFunc),
+    configurableRetryConfig(retryConfig),
 ).catch((e) => {
     setRetryError(formatRetryErrorStack(e, 'THREW FROM WITHIN retryWithElement'));
     throw new Error(`Threw from retryWIthElement - ${e}`);
@@ -129,17 +141,17 @@ export const retryWithElement = async ({
 /**
  * Asynchronously retries a given function
  * @param {Function} retryFunc The function to retry
- * @param {Function} [onRetryFunc] The function to execute upon each retry
+ * @param {Object} [retryConfig] The asyncRetry config object
  * @returns {Promise<*>}
  */
 export const basicRetry = async (
     retryFunc,
-    onRetryFunc = () => {},
+    retryConfig = () => {},
 ) => {
     if (shouldBasicRetry) {
         return retry(
             async (bail, iteration) => retryFunc(bail, iteration),
-            retryConfig(onRetryFunc),
+            configurableRetryConfig(retryConfig),
         ).catch((e) => {
             setRetryError(formatRetryErrorStack(e, 'THREW FROM WITHIN basicRetry'));
             throw new Error(`Threw from basicRetry - ${e}`);
