@@ -102,11 +102,10 @@ export const configurableRetryConfig = ({
  * @param {Object} [retryConfig] The asyncRetry config object
  * @returns {Promise<*>}
  */
-export const retryWithElement = async ({
+export const retryWithElement = async (
     by,
     retryFunc,
     retryConfig,
-} = {},
 ) => retry(
     async (bail, iteration) => {
         if (

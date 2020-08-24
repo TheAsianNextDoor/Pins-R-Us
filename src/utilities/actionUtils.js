@@ -43,9 +43,9 @@ export const scrollIntoViewIfNeeded = async (webElement) => {
  * @param {Locator[]} by The Locator Array that points to the WebElement
  * @returns {Promise<void>}
  */
-export const click = async (by) => retryWithElement({
+export const click = async (by) => retryWithElement(
     by,
-    retryFunc: async (element) => {
+    async (element) => {
         const el = ensureIsWebElement(element);
         const actions = getActions();
         await actions
@@ -57,7 +57,7 @@ export const click = async (by) => retryWithElement({
             .click(el)
             .perform();
     },
-});
+);
 
 /**
  * Sends keys to a WebElement in the DOM given a Locator
@@ -68,14 +68,14 @@ export const click = async (by) => retryWithElement({
 export const sendKeysToElement = async (
     by,
     text,
-) => retryWithElement({
+) => retryWithElement(
     by,
-    retryFunc: async (element) => {
+    async (element) => {
         const el = ensureIsWebElement(element);
         await el.clear();
         await el.sendKeys(text);
     },
-});
+);
 
 /**
  * Sends keys to a WebElement in the DOM given a Locator one at a time with a pause in between
@@ -87,9 +87,9 @@ export const sendKeysToElement = async (
 export const sendKeysOneAtATime = async (
     by,
     text,
-) => retryWithElement({
+) => retryWithElement(
     by,
-    retryFunc: async (element) => {
+    async (element) => {
         const el = ensureIsWebElement(element);
         await el.clear();
         const textArray = text.split('');
@@ -98,7 +98,7 @@ export const sendKeysOneAtATime = async (
             await wait(25);
         }
     },
-});
+);
 
 /**
  * Retrieves the text from a WebElement given a Locator
@@ -106,20 +106,20 @@ export const sendKeysOneAtATime = async (
  * @param {Locator[]} by The Locator Array to find the WebElement
  * @returns {Promise<string>}
  */
-export const getText = async (by) => retryWithElement({
+export const getText = async (by) => retryWithElement(
     by,
-    retryFunc: async (element) => {
+    async (element) => {
         const el = ensureIsWebElement(element);
         return el.getText();
     },
-});
+);
 
 export const setValue = async (
     by,
     value,
-) => retryWithElement({
+) => retryWithElement(
     by,
-    retryFunc: async (element) => {
+    async (element) => {
         const el = ensureIsWebElement(element);
         const driver = getDriver();
         await driver.executeScript(
@@ -131,7 +131,7 @@ export const setValue = async (
         );
         await wait(25);
     },
-});
+);
 
 /**
  * Retrieves the value attribute from a WebElement given a Locator
@@ -139,13 +139,13 @@ export const setValue = async (
  * @param {Locator[]} by The Locator Array to find the WebElement
  * @returns {Promise<string>}
  */
-export const getValue = async (by) => retryWithElement({
+export const getValue = async (by) => retryWithElement(
     by,
-    retryFunc: async (element) => {
+    async (element) => {
         const el = ensureIsWebElement(element);
         return el.getAttribute('value');
     },
-});
+);
 
 /**
  * Natively presses the ENTER key

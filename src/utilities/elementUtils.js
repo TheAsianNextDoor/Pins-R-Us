@@ -64,9 +64,7 @@ export const locateElements = async (locatorArray) => {
         } catch (e) {
             // handle NoSuchElementError specially
             if (e instanceof NoSuchElementError) {
-                throw new Error(`Could not find WebElement using locator array:\n${
-                    JSON.stringify(locatorArray, null, 4)
-                }`);
+                // do nothing
             }
             throw new Error(e);
         }
