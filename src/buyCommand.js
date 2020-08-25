@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import commander from 'commander';
 import moment from 'moment';
 import { exit } from 'process';
@@ -12,6 +11,9 @@ import {
     executeAsyncFunction,
 } from './utilities/scheduleUtils';
 import { config } from './config';
+import {
+    stringifyObjectWithColor, stringWithColor,
+} from './utilities/stringUtils';
 
 commander
     .description('Purchase an item from a website at a given date and time in the future')
@@ -41,9 +43,8 @@ const parsedDateTime = moment(commander.dateTime).toDate();
 const { user } = commander;
 
 // Message to warn user to double check values
-console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${JSON.stringify(commander.opts(), null, 4)}`);
-console.log(`\nIf they are not correct, kill script with command: ${chalk.cyan('ctrl + c')}`);
-
+console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${stringifyObjectWithColor(commander.opt())}`);
+console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
 
 (async () => {
     await initializeDriver();

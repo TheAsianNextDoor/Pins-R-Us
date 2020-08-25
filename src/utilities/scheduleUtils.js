@@ -1,7 +1,7 @@
-import chalk from 'chalk';
 import { exit } from 'process';
 import { scheduleJob } from 'node-schedule';
 import { getRetryError } from './retryUtils';
+import { stringWithColor } from './stringUtils';
 
 /**
  * Executes an asynchronous function in the future
@@ -17,7 +17,7 @@ export const scheduleAsyncFunction = (func, date) => scheduleJob(
             if (retryError) {
                 console.log(retryError);
             }
-            console.log(`Root error: ${chalk.red(e)}`);
+            console.log(`Root error: ${stringWithColor(e, 'red')}`);
             exit(0);
         })
         .finally(() => {
@@ -32,7 +32,7 @@ export const executeAsyncFunction = async (func) => func()
         if (retryError) {
             console.log(retryError);
         }
-        console.log(`Root error: ${chalk.red(e)}`);
+        console.log(`Root error: ${stringWithColor(e, 'red')}`);
         exit(0);
     })
     .finally(() => {

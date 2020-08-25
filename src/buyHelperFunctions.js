@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import readline from 'readline';
 import { exit } from 'process';
 import LotuCollections from './websites/lotu/lotuCollections';
@@ -7,6 +6,9 @@ import {
     ensureFutureMoment,
 } from './utilities/dateUtils';
 import ArtistryCollections from './websites/artistry/artistryCollections';
+import {
+    stringWithColor, logStringWithColor,
+} from './utilities/stringUtils';
 
 /**
  * List of supported websites
@@ -29,7 +31,7 @@ const rl = readline.createInterface({
  */
 export const ensureSupportedWebsite = (website) => {
     if (!supportedWebsites.some((site) => site === website)) {
-        console.log(`\n'${website}' ${chalk.redBright('IS NOT A SUPPORTED WEBSITE')}\
+        console.log(`\n'${website}' ${stringWithColor('IS NOT A SUPPORTED WEBSITE', 'redBright')}\
         \nPlease enter one of the following: ${supportedWebsites}\
         \nExiting Script\n`);
         exit(0);
@@ -38,7 +40,7 @@ export const ensureSupportedWebsite = (website) => {
 
 export const ensureDateIsCorrect = (passedDate) => {
     const finalQuestion = `Is this date correct? ${
-        chalk.magenta(passedDate)
+        stringWithColor(passedDate, 'magenta')
     }\nEnter y/yes or n/no\n`;
     console.log(finalQuestion);
 
@@ -120,13 +122,19 @@ export const preCheckOptions = (options) => {
 
     // if no dateTime or now option passed in
     if (!dateTime && !now) {
-        console.log(`${chalk.redBright('\nMust pass in either dateTime or \'now\' flag. Did not pass either')}\n`);
+        logStringWithColor(
+            '\nMust pass in either dateTime or \'now\' flag. Did not pass either',
+            'red',
+        );
         exit(0);
     }
 
     // if dateTime and now option passed in
     if (dateTime && now) {
-        console.log(`${chalk.redBright('\nMust pass in either dateTime or \'now\' flag. Passed in both')}\n`);
+        logStringWithColor(
+            '\nMust pass in either dateTime or \'now\' flag. Passed in both',
+            'red',
+        );
         exit(0);
     }
 

@@ -1,9 +1,9 @@
-import chalk from 'chalk';
 import Button from '../../controls/button';
 import Input from '../../controls/input';
 import Select from '../../controls/select';
 import { by } from '../../utilities/byUtils';
 import ShopifyShipping from './shopifyShipping';
+import { stringWithColor } from '../../utilities/stringUtils';
 
 export default class ShopifyInformation {
     constructor(
@@ -59,7 +59,7 @@ export default class ShopifyInformation {
             || !state
             || !zip
         ) {
-            throw new Error(chalk.redBright('Must pass in all checkout fields, check config.js'));
+            throw new Error(stringWithColor('Must pass in all checkout fields, check config.js', 'red'));
         }
 
         if (this.isEmailOrPhone) {

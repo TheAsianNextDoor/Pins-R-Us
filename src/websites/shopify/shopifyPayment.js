@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import Button from '../../controls/button';
 import Input from '../../controls/input';
 import {
@@ -70,7 +69,7 @@ export default class ShopifyPayment {
             || !cardExpirationDate
             || !cardSecurityCode
         ) {
-            throw new Error(chalk.redBright('Must pass in all payment fields, check config.js'));
+            throw new Error(stringWithColor('Must pass in all payment fields, check config.js', 'red'));
         }
         await this.cardNumber.sendKeysOneAtATime(cardNumber);
         await this.cardNameOn.sendKeysOneAtATime(cardNameOn);

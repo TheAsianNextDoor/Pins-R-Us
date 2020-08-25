@@ -1,12 +1,12 @@
 import retry from 'async-retry';
 import boxen from 'boxen';
-import chalk from 'chalk';
 import { getBooleanEnvVariable } from '../environmentVariables';
 import { locateElement } from './elementUtils';
 import {
     getCurrentlyInFrame,
     switchToDefaultFrame,
 } from './frameUtils';
+import { stringWithColor } from './stringUtils';
 
 // environment variables
 const shouldBasicRetry = getBooleanEnvVariable('shouldBasicRetry');
@@ -54,12 +54,12 @@ const formatRetryErrorStack = (error, message) => {
     const formattedError = error;
     formattedError.stack = `${
         boxen(
-            `${chalk.bold.magenta(message)}`,
+            `${stringWithColor(message, 'magenta', 'bold')}`,
             boxenConfig,
         )
-    }\n${chalk.red(error.stack)}\n${
+    }\n${stringWithColor(error.stack, 'redBright')}\n${
         boxen(
-            `${chalk.bold.magenta(message)}`,
+            `${stringWithColor(message, 'magenta', 'bold')}`,
             boxenConfig,
         )
     }`;

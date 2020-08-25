@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { exit } from 'process';
-import chalk from 'chalk';
+import { stringWithColor } from './stringUtils';
 
 const momentFormat = 'YYYY-MM-DD HH:mm:ss';
 
@@ -18,7 +18,7 @@ export const parseMoment = (dateString) => {
     }
     const parsedMoment = moment(dateString);
     if (!(parsedMoment.isValid())) {
-        console.log(`${chalk.redBright('\nInvalid Date Time.')}\
+        console.log(`${stringWithColor('\nInvalid Date Time.', 'redBright')}\
             \nWas passed ${dateString}\
             \nMust be in format: '${momentFormat}'\
             \nExample: '2013-02-08 24:00:00'\n`);
@@ -39,15 +39,15 @@ export const ensureFutureMoment = (passedMoment) => {
     const currentMoment = moment();
     if (currentMoment.isAfter(passedMoment)) {
         console.log(`\n${
-            chalk.redBright('Entered date-time: ')
+            stringWithColor('Entered date-time: ', 'redBright')
         }${
             passedMoment.toString()
         }\n${
-            chalk.redBright('was before current date-time: ')
+            stringWithColor('was before current date-time: ', 'redBright')
         }${
             currentMoment.toString()
         }\n${
-            chalk.redBright('Please run script with valid future date-time')
+            stringWithColor('Please run script with valid future date-time', 'redBright')
         }\n`);
         exit(0);
     }
