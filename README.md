@@ -2,7 +2,7 @@
 
 <br>
 
-![SpongeBob Money Bags gif](images/readme/spongeBobOnSeahorse.gif)
+![SpongeBob On SeaHorse gif](images/readme/spongeBobOnSeaHorse.gif)
 
 <br>
 
