@@ -21,7 +21,13 @@
 
 ## Prerequisites
 
-Chrome Browser
+[Chrome Browser](https://www.google.com/chrome/) - Browser to run automation on 
+
+[Node.js](https://nodejs.org/en/) - Javascript runtime engine
+
+[Git](https://git-scm.com/downloads) - Version control system
+
+<br>
 
 ## General Info
 
@@ -122,10 +128,8 @@ File location: **./src/config.js**
 <br>
 
 ## Technologies
-
-Javascript runtime environment - [Node.js](https://nodejs.org/en/)
  
-Npm modules utilized:
+Npm modules:
 - [selenium-webdriver](https://www.npmjs.com/package/selenium-webdriver)
 - [babel](https://www.npmjs.com/package/Babel)
 - [eslint](https://www.npmjs.com/package/eslint)
