@@ -66,7 +66,12 @@ export const ensureDateIsCorrect = (passedDate) => {
 const lotuPurchase = async (user) => {
     const lotuCollections = new LotuCollections();
     await lotuCollections.navTo();
-    const lotuProduct = await lotuCollections.clickTileLinkByName(user.item);
+    let lotuProduct;
+    try {
+        lotuProduct = await lotuCollections.clickTileLinkByName(user.item);
+    } catch (e) {
+        throw new Error(stringWithColor(`Tile name did not match anything on Lotu page \n\n${e}`, 'red'));
+    }
     const shopifyInfo = await lotuProduct.clickBuyButton();
     const shopifyShipping = await shopifyInfo.expressCheckout(user);
     const shopifyPayment = await shopifyShipping.clickContinueToPayment();
@@ -82,7 +87,12 @@ const lotuPurchase = async (user) => {
 const artistryPurchase = async (user) => {
     const artistryCollections = new ArtistryCollections();
     await artistryCollections.navTo();
-    const artistryProduct = await artistryCollections.clickTileByName(user.item);
+    let artistryProduct;
+    try {
+        artistryProduct = await artistryCollections.clickTileByName(user.item);
+    } catch (e) {
+        throw new Error(stringWithColor(`Tile name did not match anything on Artistry page \n\n${e}`, 'red'));
+    }
     const artistryShoppingCart = await artistryProduct.clickAddToCart();
     const shopifyInfo = await artistryShoppingCart.clickCheckout();
     const shopifyShipping = await shopifyInfo.expressCheckout(user);

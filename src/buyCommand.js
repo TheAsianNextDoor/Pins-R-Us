@@ -43,7 +43,7 @@ const parsedDateTime = moment(commander.dateTime).toDate();
 const { user } = commander;
 
 // Message to warn user to double check values
-console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${stringifyObjectWithColor(commander.opt())}`);
+console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${stringifyObjectWithColor(commander.opts())}`);
 console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
 
 (async () => {
