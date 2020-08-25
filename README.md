@@ -1,8 +1,8 @@
-# AutomatedPins
+# Automate Chrome
 
 <br>
 
-![SpongeBob Money Bags gif](images/readme/spongeBobMoneyBag.gif)
+![SpongeBob Money Bags gif](images/readme/spongeBobOnSeahorse.gif)
 
 <br>
 
@@ -23,7 +23,7 @@
 
 [Chrome Browser](https://www.google.com/chrome/) - Browser to run automation on 
 
-[Node.js](https://nodejs.org/en/) - Javascript runtime engine
+[NodeJs](https://nodejs.org/en/) - Javascript runtime engine
 
 [Git](https://git-scm.com/downloads) - Version control system
 
@@ -31,17 +31,19 @@
 
 ## General Info
 
-Automate the buying process for pins using Selenium Web Driver. Offers the ability to schedule the script to execute in the future or immediately. 
+Automate the Chrome browser using Selenium Web Driver. Offers a framework for interacting with DOM elements. This framework can be used to build scripts that interact with any webpage on the internet. The scripts can be scheduled to execute in the future or immediately. 
 
-The script will start a Chrome Browser and navigate to the specified website's offerings page and click the user defined item to purchase. Then it will proceed to checkout, input shipping information and payment information, and finally purchase the item.
+Currently automated process:
+ - Purchasing hat pins
 
 <br>
 
 ## Supported Websites
-
- 1. [Lotu](https://www.lotucreations.com/collections/hat-pins)
- 2. [Artistry](https://theartistrycollection.com/collections/2018)
- 3. Pookster
+- Purchasing:
+  - Hat Pins:
+     1. [Lotu](https://www.lotucreations.com/collections/hat-pins)
+     2. [Artistry](https://theartistrycollection.com/collections/2018)
+     3. Pookster
 
 <br>
 
