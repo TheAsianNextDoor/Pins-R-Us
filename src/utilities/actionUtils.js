@@ -5,6 +5,7 @@ import {
     // eslint-disable-next-line no-unused-vars
     WebElement,
 } from 'selenium-webdriver';
+import { Promise } from 'bluebird';
 import { getDriver } from '../driver';
 import { ensureIsWebElement } from './elementUtils';
 import { retryWithElement } from './retryUtils';
@@ -93,10 +94,13 @@ export const sendKeysOneAtATime = async (
         const el = ensureIsWebElement(element);
         await el.clear();
         const textArray = text.split('');
-        for (let i = 0; i < textArray.length; i += 1) {
-            await el.sendKeys(textArray[i]);
-            await wait(1);
-        }
+        return Promise.each(
+            textArray,
+            async (char) => {
+                await el.sendKeys(char);
+                await wait(2);
+            },
+        );
     },
 );
 
