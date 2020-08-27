@@ -2,7 +2,7 @@
 
 <br>
 
-![SpongeBob On SeaHorse gif](http://gph.is/2cddIvI)
+![SpongeBob On SeaHorse gif](https://media.giphy.com/media/3o6ZtbBRPGc1LvF4Na/giphy.gif)
 
 <br>
 
