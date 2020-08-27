@@ -38,7 +38,7 @@ export const setDriver = (driver) => {
 
 /**
  * Creates an instance of the chrome webdriver and sets the private webdriver variable
- * @returns {WebDriver}
+ * @returns {Promise<WebDriver>}
  */
 export const initializeDriver = async () => {
     const options = new chrome.Options()

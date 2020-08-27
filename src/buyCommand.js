@@ -1,6 +1,5 @@
 import commander from 'commander';
 import moment from 'moment';
-import { exit } from 'process';
 import {
     executePurchase,
     preCheckOptions,
@@ -54,7 +53,6 @@ console.log(`\nIf they are not correct, kill script with command: ${stringWithCo
             async () => executePurchase[commander.website](config[user]),
             parsedDateTime,
         );
-        exit(0);
     } else if (commander.now) {
         await executeAsyncFunction(async () => executePurchase[commander.website](config[user]));
     }
