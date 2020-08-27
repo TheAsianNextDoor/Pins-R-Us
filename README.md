@@ -2,20 +2,29 @@
 
 <br>
 
-![SpongeBob On SeaHorse gif](images/readme/spongeBobOnSeaHorse.gif)
+![SpongeBob On SeaHorse gif](http://gph.is/2cddIvI)
 
 <br>
 
 ## Table of contents
 
-  - [Prerequisites](#prerequisites)
   - [General Info](#general-info)
-  - [Supported Websites](#supported-websites)
-  - [Directory Information](#directory-information)
+  - [Prerequisites](#prerequisites)
   - [Setup](#setup)
+  - [Supported Websites](#supported-websites)
   - [Config](#config)
   - [Execution](#execution)
+  - [Directory Information](#directory-information)
   - [Technologies](#technologies)
+
+<br>
+
+## General Info
+
+Automate the Chrome browser using Selenium Web Driver. Offers a framework for interacting with DOM elements. This framework can be used to build scripts that interact with any webpage on the internet. The scripts can be scheduled to execute in the future or immediately. 
+
+Currently automated process:
+ - Purchasing hat pins
 
 <br>
 
@@ -29,12 +38,10 @@
 
 <br>
 
-## General Info
-
-Automate the Chrome browser using Selenium Web Driver. Offers a framework for interacting with DOM elements. This framework can be used to build scripts that interact with any webpage on the internet. The scripts can be scheduled to execute in the future or immediately. 
-
-Currently automated process:
- - Purchasing hat pins
+## Setup
+  1. clone repo to local
+  2. navigate to local cloned directory
+  3. execute command: `npm install` (downloading dependencies)
 
 <br>
 
@@ -47,49 +54,10 @@ Currently automated process:
 
 <br>
 
-## Directory Information
-
-A brief descriptions of important *./src* directories and files:
-
-- **controls**
-  - Representations of specific dom elements with interactive Selenium functions 
-  - If possible, attempt to keep usages of *actionUtils.js* in these files
-  
-- **websites**
-  - Contains the interactable representations of each website's dom elements
-  
-- **utilities**
-  - actionUtils.js
-    - A wrapper for the Selenium action chain
-  - byUtils.js
-    - A wrapper for the Selenium selector class (wrapping it in an array and adding a position key)
-    - Reusable xpath snippets
-  - elementUtils.js
-    - Locates WebElements and switches frames using the array wrapped selectors
-  - retryUtils.js
-    - Retry logic that locates WebElements and passes them through to *actionUtils.js* functions
-    - Basic retries used for general purpose
-  - waitUntilUtils.js
-    - Functions that utilize Seleniums wait logic
-  
-- **buyCommand.js**
-  - The root of execution. Receives options, parses, and passes them through to control flow for each website
-  
-- **buyHelperFunctions.js**
-  - Control flow for each website
-  - Misc parsing functions for *buyCommand.js*
-  
-<br>
-
-## Setup
-  1. clone repo to local
-  2. navigate to local cloned directory
-  3. execute command: `npm install` (downloading dependencies)
-
-<br>
-
 ## Config
 File location: **./src/config.js**
+
+Each primary depth key is used as identification to its value object that houses the secondary depth keys, which its keys and values are used as credentials, shipping, and payment information.
 
 - **item** - name of item to purchase (must escape all quotations with ' \\' character)
 - **email** - email to purchase item with  
@@ -127,6 +95,40 @@ File location: **./src/config.js**
   - `npm run buy -- --website "lotu" -n -u "user1"`
   - `npm run buy -- -w "artistry" --now --user "user2"`
 
+<br>
+
+## Directory Information
+
+A brief descriptions of important *./src* directories and files:
+
+- **controls**
+  - Representations of specific dom elements with interactive Selenium functions 
+  - If possible, attempt to keep usages of *actionUtils.js* in these files
+  
+- **websites**
+  - Contains the interactable representations of each website's dom elements
+  
+- **utilities**
+  - actionUtils.js
+    - A wrapper for the Selenium action chain
+  - byUtils.js
+    - A wrapper for the Selenium selector class (wrapping it in an array and adding a position key)
+    - Reusable xpath snippets
+  - elementUtils.js
+    - Locates WebElements and switches frames using the array wrapped selectors
+  - retryUtils.js
+    - Retry logic that locates WebElements and passes them through to *actionUtils.js* functions
+    - Basic retries used for general purpose
+  - waitUntilUtils.js
+    - Functions that utilize Seleniums wait logic
+  
+- **buyCommand.js**
+  - The root of execution. Receives options, parses, and passes them through to control flow for each website
+  
+- **buyHelperFunctions.js**
+  - Control flow for each website
+  - Misc parsing functions for *buyCommand.js*
+  
 <br>
 
 ## Technologies
