@@ -1,5 +1,4 @@
 import { WebElement } from 'selenium-webdriver';
-import { NoSuchElementError } from 'selenium-webdriver/lib/error';
 import { getDriver } from '../driver';
 import { switchToFrame } from './frameUtils';
 import { stringifyObjectWithColor } from './stringUtils';
@@ -45,7 +44,10 @@ export const ensureIsWebElement = (item) => {
  * @param {ByArray} byArray Array of Locators leading to WebElements
  * @returns {Promise<WebElement[]>}
  */
-export const locateElements = async (byArray) => {
+export const locateElements = async (
+    byArray,
+    shouldThrowError = true,
+) => {
     if (
         !(byArray instanceof ByArray)
         || byArray.length < 1
@@ -70,21 +72,19 @@ export const locateElements = async (byArray) => {
             } else {
                 currentElement = (await rootElement.findElements(currentBy))[currentByPosition];
             }
-        } catch (e) {
-            // handle NoSuchElementError specially
-            if (e instanceof NoSuchElementError) {
-                // do nothing
-            }
-            throw new Error(e);
-        }
 
-        if (await currentElement.getTagName() === 'iframe') {
-            await switchToFrame(currentElement);
-            rootElement = getDriver();
-        } else if (i === byArray.length - 1) { // if last by, always find all paths
-            rootElement = await rootElement.findElements(currentBy);
-        } else { // if not last by
-            rootElement = currentElement;
+            if (await currentElement.getTagName() === 'iframe') {
+                await switchToFrame(currentElement);
+                rootElement = getDriver();
+            } else if (i === byArray.length - 1) { // if last by, always find all paths
+                rootElement = await rootElement.findElements(currentBy);
+            } else { // if not last by
+                rootElement = currentElement;
+            }
+        } catch (e) {
+            if (shouldThrowError) {
+                throw new Error(e);
+            }
         }
     }
     return rootElement;
@@ -97,8 +97,11 @@ export const locateElements = async (byArray) => {
  * @param {ByArray} byArray Array of Locators leading to a single WebElement
  * @returns {Promise<WebElement>}
  */
-export const locateElement = async (byArray) => {
-    const elements = await locateElements(byArray);
+export const locateElement = async (
+    byArray,
+    shouldThrowError = true,
+) => {
+    const elements = await locateElements(byArray, shouldThrowError);
     const result = (elements.length > 0) ? elements[0] : null;
 
     if (shouldTraceLog) {
