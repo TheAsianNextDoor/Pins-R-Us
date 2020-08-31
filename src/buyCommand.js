@@ -1,5 +1,5 @@
 import commander from 'commander';
-import moment from 'moment';
+import { parseISO } from 'date-fns';
 import {
     executePurchase,
     preCheckOptions,
@@ -37,8 +37,8 @@ commander
 
 preCheckOptions(commander.opts());
 
-// parse into moment and then convert into JS Date Object for scheduleAsyncFunction
-const parsedDateTime = moment(commander.dateTime).toDate();
+// parse iso8601 string into Date Object for scheduleAsyncFunction
+const parsedDateTime = parseISO(commander.dateTime);
 const { user } = commander;
 
 // Message to warn user to double check values

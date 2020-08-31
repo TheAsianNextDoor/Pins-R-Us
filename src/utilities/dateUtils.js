@@ -1,51 +1,55 @@
-import moment from 'moment';
 import { exit } from 'process';
+import {
+    parseISO,
+    isBefore,
+    isValid,
+} from 'date-fns';
 import { stringWithColor } from './stringUtils';
 
-const momentFormat = 'YYYY-MM-DD HH:mm:ss';
+const iso8601Format = 'YYYY-MM-DD HH:mm:ss';
 
 /**
  * Determines if the given date is valid or not
  * If not, exits process
  *
  * @param {Date} dateString Date in string format to check
- * @returns {moment.Moment}
+ * @returns {Date}
  */
-export const parseMoment = (dateString) => {
+export const parseDate = (dateString) => {
     if (typeof dateString !== 'string') {
         console.log(`\nWas not passed a string. Was passed: ${dateString}\n`);
         exit(0);
     }
-    const parsedMoment = moment(dateString);
-    if (!(parsedMoment.isValid())) {
+    const parsedDate = parseISO(dateString);
+    if (!isValid(parsedDate)) {
         console.log(`${stringWithColor('\nInvalid Date Time.', 'redBright')}\
             \nWas passed ${dateString}\
-            \nMust be in format: '${momentFormat}'\
+            \nMust be in format: '${iso8601Format}'\
             \nExample: '2013-02-08 24:00:00'\n`);
         exit(0);
     }
-    return parsedMoment;
+    return parsedDate;
 };
 
 
 /**
- * Checks if the moment is in the future, if it is, return the moment
- * If it is not, return current moment plus 30 seconds
+ * Checks if the Date is in the future, if it is, return the Date
+ * If it is not, return current Date plus 30 seconds
  *
- * @param {moment} passedMoment The JS date object to ensure
+ * @param {Date} dateTime The JS date object to ensure
  * @returns {void}
  */
-export const ensureFutureMoment = (passedMoment) => {
-    const currentMoment = moment();
-    if (currentMoment.isAfter(passedMoment)) {
+export const ensureFutureDateTime = (dateTime) => {
+    const currentDateTime = new Date();
+    if (isBefore(dateTime, currentDateTime)) {
         console.log(`\n${
             stringWithColor('Entered date-time: ', 'redBright')
         }${
-            passedMoment.toString()
+            dateTime.toString()
         }\n${
             stringWithColor('was before current date-time: ', 'redBright')
         }${
-            currentMoment.toString()
+            currentDateTime.toString()
         }\n${
             stringWithColor('Please run script with valid future date-time', 'redBright')
         }\n`);
