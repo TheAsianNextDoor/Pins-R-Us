@@ -1,5 +1,8 @@
 import commander from 'commander';
-import { parseISO } from 'date-fns';
+import {
+    parseISO,
+    sub,
+} from 'date-fns';
 import {
     executePurchase,
     preCheckOptions,
@@ -46,14 +49,31 @@ console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${stringifyObjectWithColor(commander
 console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
 
 (async () => {
-    await initializeDriver();
-
     if (commander.dateTime) {
+        // schedule driver initialize
+        await scheduleAsyncFunction(
+            async () => initializeDriver(),
+            sub(
+                parsedDateTime,
+                {
+                    seconds: 15,
+                },
+            ),
+        );
+
+        // schedule script start
         await scheduleAsyncFunction(
             async () => executePurchase[commander.website](config[user]),
-            parsedDateTime,
+            sub(
+                parsedDateTime,
+                {
+                    seconds: 1,
+                },
+            ),
+            true,
         );
     } else if (commander.now) {
+        await initializeDriver();
         await executeAsyncFunction(async () => executePurchase[commander.website](config[user]));
     }
 })();
