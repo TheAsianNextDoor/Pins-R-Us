@@ -2,8 +2,8 @@ import readline from 'readline';
 import { exit } from 'process';
 import LotuCollections from './websites/lotu/lotuCollections';
 import {
-    parseMoment,
-    ensureFutureMoment,
+    parseDate,
+    ensureFutureDateTime,
 } from './utilities/dateUtils';
 import ArtistryCollections from './websites/artistry/artistryCollections';
 import {
@@ -68,6 +68,7 @@ const lotuPurchase = async (user) => {
     await lotuCollections.navTo();
     let lotuProduct;
     try {
+        await lotuCollections.refreshPageLocatingTileByName(user.item);
         lotuProduct = await lotuCollections.clickTileLinkByName(user.item);
     } catch (e) {
         throw new Error(stringWithColor(`Tile name did not match anything on Lotu page \n\n${e}`, 'red'));
@@ -89,6 +90,7 @@ const artistryPurchase = async (user) => {
     await artistryCollections.navTo();
     let artistryProduct;
     try {
+        await artistryCollections.refreshPageLocatingTileByName(user.item);
         artistryProduct = await artistryCollections.clickTileByName(user.item);
     } catch (e) {
         throw new Error(stringWithColor(`Tile name did not match anything on Artistry page \n\n${e}`, 'red'));
@@ -110,6 +112,10 @@ const pooksterPurchase = async () => {
 
 };
 
+const scritchPurchase = async () => {
+
+};
+
 /**
  * Enum for website purchase control flow
  */
@@ -117,6 +123,7 @@ export const executePurchase = {
     lotu: async (user) => lotuPurchase(user),
     artistry: async (user) => artistryPurchase(user),
     pookster: async (user) => pooksterPurchase(user),
+    scritch: async (user) => scritchPurchase(user),
 };
 
 /**
@@ -150,8 +157,8 @@ export const preCheckOptions = (options) => {
 
     // Ensure datTime is in iso 8601 format and in the future if passed
     if (dateTime) {
-        const parsedMoment = parseMoment(dateTime);
-        ensureFutureMoment(parsedMoment);
+        const parsedDate = parseDate(dateTime);
+        ensureFutureDateTime(parsedDate);
     }
     ensureSupportedWebsite(website);
 };

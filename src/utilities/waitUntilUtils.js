@@ -5,25 +5,33 @@ import {
     WebElement,
 } from 'selenium-webdriver';
 import { getDriver } from '../driver';
-import { retryWithElement } from './retryUtils';
+import {
+    retryWithElement, basicRetry,
+} from './retryUtils';
+import { locateElement } from './elementUtils';
+import { wait } from './waitUtils';
+import { refreshPage } from './navigationUtils';
+// eslint-disable-next-line no-unused-vars
+import { ByArray } from './byUtils';
+import { stringifyObjectWithColor } from './stringUtils';
 
-export const elementNotFound = {
-    toString: () => 'ElementNotFound',
+export const waitUntilElementNotFound = {
+    toString: () => 'waitUntil ElementNotFound',
 };
 
 /**
  * Waits until a WebElement is visible or the maximum time has elapsed
  *
  * @param {Locator[]} by The WebElement's Locator
- * @param {boolean} [throwError] Whether or not the function should throw
+ * @param {boolean} [shouldThrowError] Whether or not the function should throw
  * @param {number} [timeout] The amount of time to try in ms
- * @returns {Promise<WebElement>| Error | Promise<elementNotFound>}
+ * @returns {Promise<WebElement>| Error | Promise<Object>}
  */
-export const waitUntilElementIsVisible = async ({
+export const waitUntilElementIsVisible = async (
     by,
-    throwError = true,
+    shouldThrowError = true,
     timeout = 20000,
-} = {}) => {
+) => {
     const driver = getDriver();
     try {
         return retryWithElement(
@@ -35,28 +43,27 @@ export const waitUntilElementIsVisible = async ({
             ),
         );
     } catch (e) {
-        if (throwError) {
+        if (shouldThrowError) {
             throw new Error(e);
         }
-        console.log(`NOT THROWING in waitUntilElementIsVisible when using locator: ${by}`);
-        return elementNotFound;
+        console.log(`NOT THROWING in waitUntilElementIsVisible when using locator: ${stringifyObjectWithColor(by)}`);
+        return waitUntilElementNotFound;
     }
 };
-
 
 /**
  * Waits until a WebElement is enabled or the maximum time has elapsed
  *
  * @param {Locator[]} by The WebElement's Locator
- * @param {boolean} [throwError] Whether or not the function should throw
+ * @param {boolean} [shouldThrowError] Whether or not the function should throw
  * @param {number} [timeout] The amount of time to try in ms
- * @returns {Promise<WebElement>| Error | Promise<elementNotFound>}
+ * @returns {Promise<WebElement>| Error | Promise<Object>}
  */
-export const waitUntilElementIsEnabled = async ({
+export const waitUntilElementIsEnabled = async (
     by,
-    throwError = true,
+    shouldThrowError = true,
     timeout = 20000,
-} = {}) => {
+) => {
     const driver = getDriver();
     try {
         return retryWithElement(
@@ -68,10 +75,47 @@ export const waitUntilElementIsEnabled = async ({
             ),
         );
     } catch (e) {
-        if (throwError) {
+        if (shouldThrowError) {
             throw new Error(e);
         }
-        console.log(`NOT THROWING in waitUntilElementIsEnabled when using locator: ${by}`);
-        return elementNotFound;
+        console.log(`NOT THROWING in waitUntilElementIsEnabled when using locator: ${stringifyObjectWithColor(by)}`);
+        return waitUntilElementNotFound;
+    }
+};
+
+/**
+ * Refresh a page until an element is located
+ *
+ * @param {ByArray} by The ByArray to locate
+ * @param {boolean} [shouldThrowError] Whether or not throw if element is not found within time
+ * @param {number} [timeout] The amount of time to attempt
+ * @returns {Promise<void> | Error | Promise<Object>}
+ */
+export const refreshPageUntilElementIsLocated = async (
+    by,
+    shouldThrowError = true,
+    timeout = 5000,
+) => {
+    try {
+        return basicRetry(
+            async () => {
+                const element = await locateElement(by, false);
+                if (!element) {
+                    await wait(3000);
+                    await refreshPage();
+                    throw new Error(`Could not refresh page and find element with by ${stringifyObjectWithColor(by)}`);
+                }
+            },
+            {
+                retries: 2,
+                maxTimeout: timeout,
+            },
+        );
+    } catch (e) {
+        if (shouldThrowError) {
+            throw new Error(e);
+        }
+        console.log(`NOT THROWING in refreshUntilElementIsLocated when using locator: ${stringifyObjectWithColor(by)}`);
+        return waitUntilElementNotFound;
     }
 };

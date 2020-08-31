@@ -9,7 +9,13 @@ import {
 import { stringWithColor } from './stringUtils';
 
 // environment variables
-const shouldBasicRetry = getBooleanEnvVariable('shouldBasicRetry');
+const shortRetryConfig = getBooleanEnvVariable('shortRetryConfig');
+
+// set up default retry config values
+const configuredDefaultRetryCount = shortRetryConfig ? 1000 : 100;
+const configuredDefaultFactor = shortRetryConfig ? 1 : 2;
+const configuredDefaultMinTimeout = shortRetryConfig ? 10 : 100;
+const configuredDefaultMaxTimeout = shortRetryConfig ? 10 : 100;
 
 /**
  * A special variable to track if an error was thrown in retry loops
@@ -67,20 +73,34 @@ const formatRetryErrorStack = (error, message) => {
 };
 
 /**
- * Returns a retry config
+ * Returns the default retry config
  *
- * @param {number} [retries = ] The number of total retries
- * @param {number} [factor = 1] The factor to increase the wait between each retry
- * @param {number} [minTimeout = 100] The first duration of time to wait between each retry in ms
- * @param {number} [maxTimeout = 1000] THe maximum duration to wait in ms
+ * @param {number} [retries] The number of total retries
+ * @param {number} [factor] The factor to increase the wait between each retry
+ * @param {number} [minTimeout] The first duration of time to wait between each retry in ms
+ * @param {number} [maxTimeout] THe maximum duration to wait in ms
  * @param {Function} onRetryFunc The function to execute upon each
  * @returns {Object}
  */
 export const configurableRetryConfig = ({
-    retries = 100,
+    retries = configuredDefaultRetryCount,
+    factor = configuredDefaultFactor,
+    minTimeout = configuredDefaultMinTimeout,
+    maxTimeout = configuredDefaultMaxTimeout,
+    onRetryFunc = () => {},
+} = {}) => ({
+    retries,
+    factor,
+    minTimeout,
+    maxTimeout,
+    onRetry: (error) => onRetryFunc(error),
+});
+
+export const configurableShortRetryConfig = ({
+    retries = 1000,
     factor = 1,
-    minTimeout = 100,
-    maxTimeout = 100,
+    minTimeout = 10,
+    maxTimeout = 10,
     onRetryFunc = () => {},
 } = {}) => ({
     retries,
@@ -101,7 +121,7 @@ export const configurableRetryConfig = ({
 export const retryWithElement = async (
     by,
     retryFunc,
-    retryConfig,
+    retryConfig = {},
 ) => retry(
     async (bail, iteration) => {
         // if in iframe reset to base frame
@@ -129,16 +149,12 @@ export const retryWithElement = async (
  */
 export const basicRetry = async (
     retryFunc,
-    retryConfig = () => {},
-) => {
-    if (shouldBasicRetry) {
-        return retry(
-            async (bail, iteration) => retryFunc(bail, iteration),
-            configurableRetryConfig(retryConfig),
-        ).catch((e) => {
-            setRetryError(formatRetryErrorStack(e, 'THREW FROM WITHIN basicRetry'));
-            throw new Error(`Threw from basicRetry - ${e}`);
-        });
-    }
-    return retryFunc();
-};
+    retryConfig = {},
+) => retry(
+    async (bail, iteration) => retryFunc(bail, iteration),
+    configurableRetryConfig(retryConfig),
+).catch((e) => {
+    setRetryError(formatRetryErrorStack(e, 'THREW FROM WITHIN basicRetry'));
+    throw new Error(`Threw from basicRetry - ${e}`);
+});
+

@@ -12,9 +12,7 @@ export default class Button {
      * @returns {Promise<void>}
      */
     click = async () => {
-        await waitUntilElementIsEnabled({
-            by: this.rootBy,
-        });
+        await waitUntilElementIsEnabled(this.rootBy);
         await click(this.rootBy);
     };
 }

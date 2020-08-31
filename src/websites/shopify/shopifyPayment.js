@@ -7,6 +7,7 @@ import {
     containsNormalizedClass,
     containsNormalizedText,
 } from '../../utilities/byUtils';
+import { stringWithColor } from '../../utilities/stringUtils';
 
 export default class ShopifyPayment {
     constructor() {

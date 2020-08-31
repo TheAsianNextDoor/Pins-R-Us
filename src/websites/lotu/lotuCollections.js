@@ -7,6 +7,7 @@ import {
 import { navToURL } from '../../utilities/navigationUtils';
 import LotuProduct from './lotuProduct';
 import Link from '../../controls/link';
+import { refreshPageUntilElementIsLocated } from '../../utilities/waitUntilUtils';
 
 export default class LotuCollections {
     constructor() {
@@ -57,4 +58,15 @@ export default class LotuCollections {
         await tileLink.clickLink();
         return new LotuProduct();
     };
+
+    /**
+     * Refresh page until an element is visible
+     *
+     * @param {String} name the name of the link to locate
+     * @returns {Promise<void>}
+     */
+    refreshPageLocatingTileByName = async (name) => {
+        const tileBy = this.getTileLinkByFromName(name);
+        await refreshPageUntilElementIsLocated(tileBy);
+    }
 }

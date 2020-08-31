@@ -6,6 +6,7 @@ import {
 } from '../../utilities/byUtils';
 import ArtistryProduct from './artistryProduct';
 import Link from '../../controls/link';
+import { refreshPageUntilElementIsLocated } from '../../utilities/waitUntilUtils';
 
 export default class ArtistryCollections {
     /**
@@ -44,5 +45,10 @@ export default class ArtistryCollections {
         const tileLink = this.getTileLinkByName(name);
         await tileLink.clickLink();
         return new ArtistryProduct();
+    };
+
+    refreshPageLocatingTileByName = async (name) => {
+        const tileBy = this.getTileBy(name);
+        await refreshPageUntilElementIsLocated(tileBy);
     };
 }

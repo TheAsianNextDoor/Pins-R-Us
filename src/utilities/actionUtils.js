@@ -11,7 +11,6 @@ import { ensureIsWebElement } from './elementUtils';
 import { retryWithElement } from './retryUtils';
 import { wait } from './waitUtils';
 
-
 /**
  * Retrieves the action chain from the Selenium WebDriver
  * Bridge Mode enables Selenium to interact with older web browsers
