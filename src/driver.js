@@ -51,7 +51,6 @@ export const initializeDriver = async () => {
         .setChromeOptions(options)
         .setChromeService(service)
         .build();
-    // await newDriver.manage().window().maximize();
     setDriver(newDriver);
     return newDriver;
 };
