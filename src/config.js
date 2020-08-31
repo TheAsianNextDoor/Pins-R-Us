@@ -3,7 +3,7 @@
  */
 export const config = {
     // for lotu purchase
-    user1: {
+    userLotu: {
         item: '"Peyotero" 3D 2 Piece Hat Pin Sets',
         email: 'blah@gmail.com',
         firstName: 'Donald',
@@ -18,7 +18,7 @@ export const config = {
         cardSecurityCode: '123',
     },
     // for artistry purchase
-    user2: {
+    userArtistry: {
         item: 'Ocean Man x "Lion Breath"',
         email: 'ok@gmail.com',
         firstName: 'Barrack',
