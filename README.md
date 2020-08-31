@@ -139,9 +139,10 @@ Npm modules:
 - [eslint](https://www.npmjs.com/package/eslint)
 - [async-retry](https://www.npmjs.com/package/async-retry)
 - [commander](https://www.npmjs.com/package/commander)
-- [moment](https://www.npmjs.com/package/moment)
+- [date-fns](https://www.npmjs.com/package/date-fns)
 - [node-schedule](https://www.npmjs.com/package/node-schedule)
-- [dotenv](https://www.npmjs.com/package/dotenv)
+- [bluebird](https://www.npmjs.com/package/bluebird)
+- [dotenv-flow](https://www.npmjs.com/package/dotenv-flow)
 - [boxen](https://www.npmjs.com/package/boxen)
 - [chalk](https://www.npmjs.com/package/chalk)
 
