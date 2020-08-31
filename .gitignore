@@ -1,4 +1,4 @@
 /node_modules
-/package-lock.json
-/debug.log
-/.env.local
+debug.log
+.env.local
+package-lock.json
