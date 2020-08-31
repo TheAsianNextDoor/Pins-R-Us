@@ -1,6 +1,6 @@
 import retry from 'async-retry';
 import boxen from 'boxen';
-import { getBooleanEnvVariable } from '../environmentVariables';
+import { getIntEnvVariable } from '../environmentVariables';
 import { locateElement } from './elementUtils';
 import {
     getCurrentlyInFrame,
@@ -9,13 +9,7 @@ import {
 import { stringWithColor } from './stringUtils';
 
 // environment variables
-const shortRetryConfig = getBooleanEnvVariable('shortRetryConfig');
-
-// set up default retry config values
-const configuredDefaultRetryCount = shortRetryConfig ? 1000 : 100;
-const configuredDefaultFactor = shortRetryConfig ? 1 : 2;
-const configuredDefaultMinTimeout = shortRetryConfig ? 10 : 100;
-const configuredDefaultMaxTimeout = shortRetryConfig ? 10 : 100;
+const defaultRetryTime = getIntEnvVariable('defaultRetryTime');
 
 /**
  * A special variable to track if an error was thrown in retry loops
@@ -83,36 +77,27 @@ const formatRetryErrorStack = (error, message) => {
  * @returns {Object}
  */
 export const configurableRetryConfig = ({
-    retries = configuredDefaultRetryCount,
-    factor = configuredDefaultFactor,
-    minTimeout = configuredDefaultMinTimeout,
-    maxTimeout = configuredDefaultMaxTimeout,
-    onRetryFunc = () => {},
-} = {}) => ({
-    retries,
-    factor,
-    minTimeout,
-    maxTimeout,
-    onRetry: (error) => onRetryFunc(error),
-});
-
-export const configurableShortRetryConfig = ({
-    retries = 1000,
+    forever = true,
+    randomize = false,
     factor = 1,
-    minTimeout = 10,
-    maxTimeout = 10,
+    minTimeout = 1,
+    maxTimeout = 1,
+    maxRetryTime = defaultRetryTime,
     onRetryFunc = () => {},
 } = {}) => ({
-    retries,
+    forever,
+    randomize,
     factor,
     minTimeout,
     maxTimeout,
+    maxRetryTime,
     onRetry: (error) => onRetryFunc(error),
 });
 
 /**
  * Asynchronously retries a function by locating the WebElement from a locator array and
  * passing it to the function for it to consume
+ *
  * @param {Locator[]} by The Locator to find the WebElement
  * @param {Function} retryFunc The function to retry
  * @param {Object} [retryConfig] The asyncRetry config object
@@ -128,6 +113,7 @@ export const retryWithElement = async (
         if (getCurrentlyInFrame()) {
             await switchToDefaultFrame();
         }
+
         const element = await locateElement(by);
         return retryFunc(
             element,
@@ -143,6 +129,7 @@ export const retryWithElement = async (
 
 /**
  * Asynchronously retries a given function
+ *
  * @param {Function} retryFunc The function to retry
  * @param {Object} [retryConfig] The asyncRetry config object
  * @returns {Promise<*>}

@@ -10,9 +10,14 @@ import { stringWithColor } from './stringUtils';
  *
  * @param {Function} func The asynchronous function to execute
  * @param {Date} date The date and time to execute the function
+ * @param {boolean} [shouldExit] Whether or not to exit script upon completion
  * @returns {Promise<void>}
  */
-export const scheduleAsyncFunction = (func, date) => scheduleJob(
+export const scheduleAsyncFunction = (
+    func,
+    date,
+    shouldExit = false,
+) => scheduleJob(
     date,
     async () => func()
         .catch((e) => {
@@ -21,11 +26,12 @@ export const scheduleAsyncFunction = (func, date) => scheduleJob(
                 console.log(retryError);
             }
             console.log(`Root error: ${stringWithColor(e, 'red')}`);
-            exit(0);
         })
         .finally(() => {
             console.log('Exiting Script\n');
-            exit(0);
+            if (shouldExit) {
+                exit(0);
+            }
         }),
 );
 
@@ -44,7 +50,6 @@ export const executeAsyncFunction = async (func) => func()
             console.log(retryError);
         }
         console.log(`Root error: ${stringWithColor(e, 'red')}`);
-        exit(0);
     })
     .finally(() => {
         console.log('Exiting Script\n');

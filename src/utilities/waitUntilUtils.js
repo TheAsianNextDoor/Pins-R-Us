@@ -94,21 +94,21 @@ export const waitUntilElementIsEnabled = async (
 export const refreshPageUntilElementIsLocated = async (
     by,
     shouldThrowError = true,
-    timeout = 5000,
+    timeout = 300000,
 ) => {
     try {
         return basicRetry(
             async () => {
                 const element = await locateElement(by, false);
                 if (!element) {
+                    // wait 3 seconds between each refresh
                     await wait(3000);
                     await refreshPage();
                     throw new Error(`Could not refresh page and find element with by ${stringifyObjectWithColor(by)}`);
                 }
             },
             {
-                retries: 2,
-                maxTimeout: timeout,
+                maxRetryTime: timeout,
             },
         );
     } catch (e) {
