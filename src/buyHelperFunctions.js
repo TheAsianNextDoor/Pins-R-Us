@@ -7,8 +7,10 @@ import {
 } from './utilities/dateUtils';
 import ArtistryCollections from './websites/artistry/artistryCollections';
 import {
-    stringWithColor, logStringWithColor,
+    stringWithColor,
+    logStringWithColor,
 } from './utilities/stringUtils';
+import { config } from './config';
 
 /**
  * List of supported websites
@@ -38,6 +40,16 @@ export const ensureSupportedWebsite = (website) => {
     }
 };
 
+export const ensureUserIsDefined = (user) => {
+    if (!Object.keys(config).some((key) => key === user)) {
+        logStringWithColor(
+            `User: "${user}" is not defined in .src/config.js\nDouble check config file`,
+            'redBright',
+        );
+        exit(0);
+    }
+};
+
 export const ensureDateIsCorrect = (passedDate) => {
     const finalQuestion = `Is this date correct? ${
         stringWithColor(passedDate, 'magenta')
@@ -63,20 +75,21 @@ export const ensureDateIsCorrect = (passedDate) => {
  * @param {Object} user Commander user option
  * @returns {void}
  */
-const lotuPurchase = async (user) => {
+const lotuPurchase = async (user, item) => {
     const lotuCollections = new LotuCollections();
     await lotuCollections.navTo();
     let lotuProduct;
     try {
-        await lotuCollections.refreshPageLocatingTileByName(user.item);
-        lotuProduct = await lotuCollections.clickTileLinkByName(user.item);
+        await lotuCollections.refreshPageLocatingTileByName(item);
+        lotuProduct = await lotuCollections.clickTileLinkByName(item);
     } catch (e) {
-        throw new Error(stringWithColor(`Tile name did not match anything on Lotu page \n\n${e}`, 'red'));
+        throw new Error(stringWithColor(`Tile name: ${item} \
+            \ndid not match anything on Lotu page \n\n${e}`, 'red'));
     }
     const shopifyInfo = await lotuProduct.clickBuyButton();
-    const shopifyShipping = await shopifyInfo.expressCheckout(user);
+    const shopifyShipping = await shopifyInfo.expressCheckout(config[user]);
     const shopifyPayment = await shopifyShipping.clickContinueToPayment();
-    await shopifyPayment.expressPay(user);
+    await shopifyPayment.expressPay(config[user]);
 };
 
 /**
@@ -85,21 +98,21 @@ const lotuPurchase = async (user) => {
  * @param {Object} user Commander user option
  * @returns {void}
  */
-const artistryPurchase = async (user) => {
+const artistryPurchase = async (user, item) => {
     const artistryCollections = new ArtistryCollections();
     await artistryCollections.navTo();
     let artistryProduct;
     try {
-        await artistryCollections.refreshPageLocatingTileByName(user.item);
-        artistryProduct = await artistryCollections.clickTileByName(user.item);
+        await artistryCollections.refreshPageLocatingTileByName(item);
+        artistryProduct = await artistryCollections.clickTileByName(item);
     } catch (e) {
         throw new Error(stringWithColor(`Tile name did not match anything on Artistry page \n\n${e}`, 'red'));
     }
     const artistryShoppingCart = await artistryProduct.clickAddToCart();
     const shopifyInfo = await artistryShoppingCart.clickCheckout();
-    const shopifyShipping = await shopifyInfo.expressCheckout(user);
+    const shopifyShipping = await shopifyInfo.expressCheckout(config[user]);
     const shopifyPayment = await shopifyShipping.clickContinueToPayment();
-    await shopifyPayment.expressPay(user);
+    await shopifyPayment.expressPay(config[user]);
 };
 
 /**
@@ -118,12 +131,15 @@ const scritchPurchase = async () => {
 
 /**
  * Enum for website purchase control flow
+ *
+ * @param {string} user the name of the user in the config file
+ * @param {string} item the tile text of the item to purchase
  */
 export const executePurchase = {
-    lotu: async (user) => lotuPurchase(user),
-    artistry: async (user) => artistryPurchase(user),
-    pookster: async (user) => pooksterPurchase(user),
-    scritch: async (user) => scritchPurchase(user),
+    lotu: async (user, item) => lotuPurchase(user, item),
+    artistry: async (user, item) => artistryPurchase(user, item),
+    pookster: async (user, item) => pooksterPurchase(user, item),
+    scritch: async (user, item) => scritchPurchase(user, item),
 };
 
 /**
@@ -134,7 +150,10 @@ export const executePurchase = {
  */
 export const preCheckOptions = (options) => {
     const {
-        dateTime, now, website,
+        dateTime,
+        now,
+        website,
+        user,
     } = options;
 
     // if no dateTime or now option passed in
@@ -161,4 +180,5 @@ export const preCheckOptions = (options) => {
         ensureFutureDateTime(parsedDate);
     }
     ensureSupportedWebsite(website);
+    ensureUserIsDefined(user);
 };

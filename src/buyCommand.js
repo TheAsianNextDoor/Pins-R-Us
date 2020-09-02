@@ -12,7 +12,6 @@ import {
     scheduleAsyncFunction,
     executeAsyncFunction,
 } from './utilities/scheduleUtils';
-import { config } from './config';
 import {
     stringifyObjectWithColor, stringWithColor,
 } from './utilities/stringUtils';
@@ -27,6 +26,10 @@ commander
         '-u, --user <user>',
         'Users to purchase item with',
     )
+    .requiredOption(
+        '-i, --item <item>',
+        'The tile text of the item to purchase',
+    )
     .option(
         '-dt, --date-time <dateTime>',
         'The date and time to start running the script',
@@ -37,20 +40,27 @@ commander
     )
     .parse(process.argv);
 
-
 preCheckOptions(commander.opts());
 
+const {
+    user,
+    website,
+    item,
+    dateTime,
+    now,
+} = commander;
+
 // parse iso8601 string into Date Object for scheduleAsyncFunction
-const parsedDateTime = parseISO(commander.dateTime);
-const { user } = commander;
+const parsedDateTime = parseISO(dateTime);
+
 
 // Message to warn user to double check values
 console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${stringifyObjectWithColor(commander.opts())}`);
 console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
 
 (async () => {
-    if (commander.dateTime) {
-        // schedule driver initialize
+    if (dateTime) {
+        // schedule driver initialization 15 seconds before inputted time
         await scheduleAsyncFunction(
             async () => initializeDriver(),
             sub(
@@ -61,19 +71,19 @@ console.log(`\nIf they are not correct, kill script with command: ${stringWithCo
             ),
         );
 
-        // schedule script start
+        // schedule script start 1 second before inputted time
         await scheduleAsyncFunction(
-            async () => executePurchase[commander.website](config[user]),
+            async () => executePurchase[website](user, item),
             sub(
                 parsedDateTime,
                 {
-                    seconds: 1,
+                    seconds: 2,
                 },
             ),
             true,
         );
-    } else if (commander.now) {
+    } else if (now) {
         await initializeDriver();
-        await executeAsyncFunction(async () => executePurchase[commander.website](config[user]));
+        await executeAsyncFunction(async () => executePurchase[website](user, item));
     }
 })();
