@@ -3,6 +3,7 @@
   "scripts": {
     "index": "node --require @babel/register ./src/index.js",
     "buy": "node --require @babel/register ./src/buyCommand.js",
+    "multiBuy": "node --require @babel/register ./src/multiBuyCommand",
     "eslint-fix": "./node_modules/.bin/eslint --fix",
     "eslint-fix-all": "npm run eslint-fix ./src/**"
   },
