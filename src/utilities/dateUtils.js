@@ -3,10 +3,11 @@ import {
     parseISO,
     isBefore,
     isValid,
+    format,
 } from 'date-fns';
 import { stringWithColor } from './stringUtils';
 
-const iso8601Format = 'YYYY-MM-DD HH:mm:ss';
+const iso8601Format = 'yyyy-MM-dd HH:mm:ss';
 
 /**
  * Determines if the given date is valid or not
@@ -45,11 +46,11 @@ export const ensureFutureDateTime = (dateTime) => {
         console.log(`\n${
             stringWithColor('Entered date-time: ', 'redBright')
         }${
-            dateTime.toString()
+            format(dateTime, iso8601Format)
         }\n${
             stringWithColor('was before current date-time: ', 'redBright')
         }${
-            currentDateTime.toString()
+            format(currentDateTime, iso8601Format)
         }\n${
             stringWithColor('Please run script with valid future date-time', 'redBright')
         }\n`);

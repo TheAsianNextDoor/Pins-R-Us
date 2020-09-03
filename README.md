@@ -76,6 +76,32 @@ Each primary depth key is used as identification to its value object that houses
 
 ## Execution
 
+### Single Purchase
+
+**Commander options:**
+
+- **-w**, **--website [website]** | (required) Which website to purchase on, expects string
+- **-u**, **--user [user]** | (required) Which user to purchase item with, expects string
+- **-i**, **--item [item]** | (required) The text of the item to purchase, expects string
+- **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format: *YYYY-MM-DD HH:mm:ss*
+- **-n**, **--now** | Execute script immediately, flag variable
+
+*Must pass in either --now or --date-time, not both*
+
+**Examples:**
+
+ - Scheduled script: 
+   - `npm run buy -- -w "lotu" --date-time "2020-08-23 14:04:30" -u "user1" --item "Hat Pin"` 
+   - `npm run buy -- --website "artistry" -dt "2020-08-23 14:04:30" --user "user2" -i "Hat Pin"`
+
+- Immediate script: 
+  - `npm run buy -- --website "lotu" -n -u "user1" --item "Hat Pin"`
+  - `npm run buy -- -w "artistry" --now --user "user2" -i "Hat Pin"`
+
+### Multi Purchase
+
+Items to purchase are configured in ./src/config under the "items" key
+
 **Commander options:**
 
 - **-w**, **--website [website]** | (required) Which website to purchase on, expects string
@@ -88,12 +114,12 @@ Each primary depth key is used as identification to its value object that houses
 **Examples:**
 
  - Scheduled script: 
-   - `npm run buy -- -w "lotu" --date-time "2020-08-23 14:04:30" -u "user1"` 
-   - `npm run buy -- --website "artistry" -dt "2020-08-23 14:04:30" --user "user2"`
+   - `npm run multiBuy -- -w "lotu" --date-time "2020-08-23 14:04:30" -u "user1"` 
+   - `npm run multiBuy -- --website "artistry" -dt "2020-08-23 14:04:30" --user "user2"`
 
 - Immediate script: 
-  - `npm run buy -- --website "lotu" -n -u "user1"`
-  - `npm run buy -- -w "artistry" --now --user "user2"`
+  - `npm run multiBuy -- --website "lotu" -n -u "user1"`
+  - `npm run multiBuy -- -w "artistry" --now --user "user2"`
 
 <br>
 
@@ -123,7 +149,10 @@ A brief descriptions of important *./src* directories and files:
     - Functions that utilize Seleniums wait logic
   
 - **buyCommand.js**
-  - The root of execution. Receives options, parses, and passes them through to control flow for each website
+  - The root of execution for single purchase. Receives options, parses, and passes them through to control flow for each website
+
+- **multiBuyCommand.js**
+  - Wrapper for buyCommand.js and root of execution for multi purchase. Spawns a child process for each item and runs the buyCommand script
   
 - **buyHelperFunctions.js**
   - Control flow for each website

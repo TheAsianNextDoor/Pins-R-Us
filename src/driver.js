@@ -3,10 +3,6 @@ import {
     Builder,
     // eslint-disable-next-line no-unused-vars
     WebDriver,
-    // eslint-disable-next-line no-unused-vars
-    Locator,
-    // eslint-disable-next-line no-unused-vars
-    WebElement,
 } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 
@@ -59,4 +55,4 @@ export const initializeDriver = async () => {
  * Kills the webdriver instance, thus closing chrome
  * @returns
  */
-export const killDriver = () => this.getDriver().quit();
+export const killDriver = () => getDriver().quit();
