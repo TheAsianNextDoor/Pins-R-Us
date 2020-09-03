@@ -9,6 +9,7 @@ import ArtistryCollections from './websites/artistry/artistryCollections';
 import {
     stringWithColor, logStringWithColor,
 } from './utilities/stringUtils';
+import NikeCollections from './websites/nike/nikeCollections';
 
 /**
  * List of supported websites
@@ -17,6 +18,7 @@ export const supportedWebsites = [
     'lotu',
     'pookster',
     'artistry',
+    'nike'
 ];
 
 const rl = readline.createInterface({
@@ -103,6 +105,30 @@ const artistryPurchase = async (user) => {
 };
 
 /**
+ * Control flow for Nike website checkout
+ *
+ * @param {Object} user Commander user option
+ * @returns {void}
+ */
+const nikePurchase = async (user) => {
+    const nikeCollections = new NikeCollections();
+    await nikeCollections.navTo();
+    let nikeProduct;
+    try {
+        await nikeCollections.refreshPageLocatingTileByName(user.item);
+        nikeProduct = await nikeCollections.clickTileByName(user.item);
+    } catch (e) {
+        throw new Error(stringWithColor(`Tile name did not match anything on Nike page \n\n${e}`, 'red'));
+    }
+    await nikeProduct.clickSize(7, 'male');
+    const nikeShoppingCart = await nikeProduct.clickShoppingCart();
+    const nikeInfo = await nikeShoppingCart.clickCheckout();
+    const nikeShipping = await nikeInfo.expressCheckout(user);
+    const nikePayment = await nikeShipping.clickContinueToPayment();
+    await nikePayment.expressPay(user);
+};
+
+/**
  * Control flow for pookster website checkout
  *
  * @param {Object} config Commander config
@@ -122,6 +148,7 @@ const scritchPurchase = async () => {
 export const executePurchase = {
     lotu: async (user) => lotuPurchase(user),
     artistry: async (user) => artistryPurchase(user),
+    nike: async (user) => nikePurchase(user),
     pookster: async (user) => pooksterPurchase(user),
     scritch: async (user) => scritchPurchase(user),
 };

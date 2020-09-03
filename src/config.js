@@ -32,4 +32,18 @@ export const config = {
         cardExpirationDate: '01 / 01',
         cardSecurityCode: '123',
     },
+    userNike: {
+        item: "Air Zoom-Type",
+        email: 'ok@gmail.com',
+        firstName: 'Barrack',
+        lastName: 'Obama',
+        address: '6419 Detroit Avenue',
+        city: 'Cleveland',
+        state: 'Ohio',
+        zip: '44102',
+        cardNumber: '1234123412341234',
+        cardNameOn: 'Barrack Obama',
+        cardExpirationDate: '01 / 01',
+        cardSecurityCode: '123',
+    }
 };
