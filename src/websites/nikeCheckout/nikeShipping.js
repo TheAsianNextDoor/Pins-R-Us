@@ -13,7 +13,7 @@ export default class NikeShipping {
     /**
      * Clicks the continue to payment button
      *
-     * @returns {Promise<ShopifyPayment>}
+     * @returns {Promise<NikePayment>}
      */
     clickContinueToPayment = async () => {
         await this.continueToPayment.click();

@@ -2,9 +2,8 @@ import Button from '../../controls/button';
 import Input from '../../controls/input';
 import Select from '../../controls/select';
 import { by } from '../../utilities/byUtils';
-import ShopifyShipping from './shopifyShipping';
 import { stringWithColor } from '../../utilities/stringUtils';
-import NikeShopping from './nikeShipping';
+import NikeShipping from './nikeShipping';
 
 export default class NikeInformation {
     constructor() {
@@ -37,7 +36,7 @@ export default class NikeInformation {
      * Enters the given info into the provided fields
      * @param {Object} param0 Config object for filling out page
      *
-     * @returns {Promise<ShopifyShipping>}
+     * @returns {Promise<NikeShipping>}
      */
     expressCheckout = async ({
         email,

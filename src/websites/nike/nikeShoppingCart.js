@@ -1,6 +1,6 @@
 import { by } from '../../utilities/byUtils';
 import Button from '../../controls/button';
-import ShopifyInformation from '../shopify/shopifyInformation';
+import NikeInformation from '../nikeCheckout/nikeInformation'
 
 export default class NikeShoppingCart {
     constructor() {
@@ -24,17 +24,13 @@ export default class NikeShoppingCart {
      */
     clickShoppingCart = async () => {
         await this.ShoppingCartButton.click();
-        return new ShopifyInformation({
-            isEmailOrPhone: true,
-        });
+        return new NikeInformation();
     };
 
     clickCheckOut = async () => {
         await this.CheckOutButton.click();
         await this.GuestCheckOutButton.click();
         await this.ManualAddressButton.click();
-        return new NikeInformation({
-            isEmailOrPhone: true,
-        });
+        return new NikeInformation();
     }
 }

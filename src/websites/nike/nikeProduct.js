@@ -8,8 +8,7 @@ import NikeShoppingCart from './nikeShoppingCart';
 import { waitUntilElementIsVisible } from'../../utilities/waitUntilUtils';
 
 export default class NikeProduct {
-    constructor(size, gender) {
-        this.size = size;
+    constructor() {
         this.addToCartBy = by.xpath(`//button[${
             containsNormalizedText('ADD TO CART')
         }]`);
@@ -38,7 +37,7 @@ export default class NikeProduct {
         }
 
         const availableCheckerBy = by.xpath(`//button[contains(text(), 'F ${
-            this.size
+            size
             } /')]/${
                 ancestorAtPosition('li', 1)
             }[@data-qa='size-available']`);
@@ -57,7 +56,7 @@ export default class NikeProduct {
     /**
      * Clicks the Add to Cart button
      *
-     * @returns {Promise<ArtistryShoppingCart>}
+     * @returns {Promise<NikeShoppingCart>}
      */
     clickAddToCart = async () => {
         await this.addToCartButton.click();
