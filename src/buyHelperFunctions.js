@@ -123,20 +123,20 @@ const artistryPurchase = async (user, item) => {
  * @param {Object} user Commander user option
  * @returns {void}
  */
-const nikePurchase = async (user) => {
+const nikePurchase = async (user, item) => {
     const nikeCollections = new NikeCollections();
     await nikeCollections.navTo();
     let nikeProduct;
     try {
-        await nikeCollections.refreshPageLocatingTileByName(user.item);
-        nikeProduct = await nikeCollections.clickTileByName(user.item);
+        await nikeCollections.refreshPageLocatingTileByName(item);
+        nikeProduct = await nikeCollections.clickTileByName(item);
     } catch (e) {
         throw new Error(stringWithColor(`Tile name did not match anything on Nike page \n\n${e}`, 'red'));
     }
     await nikeProduct.clickSize(7, 'male');
     const nikeShoppingCart = await nikeProduct.clickShoppingCart();
     const nikeInfo = await nikeShoppingCart.clickCheckout();
-    const nikeShipping = await nikeInfo.expressCheckout(user);
+    const nikeShipping = await nikeInfo.expressCheckout(config[user]);
     const nikePayment = await nikeShipping.clickContinueToPayment();
     await nikePayment.expressPay(user);
 };

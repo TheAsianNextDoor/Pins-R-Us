@@ -38,7 +38,7 @@ export const config = {
         cardSecurityCode: '123',
     },
     userNike: {
-        item: "Air Zoom-Type",
+        items: ['Air Zoom-Type'],
         email: 'ok@gmail.com',
         firstName: 'Barrack',
         lastName: 'Obama',
