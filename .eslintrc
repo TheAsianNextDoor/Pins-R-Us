@@ -25,7 +25,7 @@
         "array-bracket-newline": ["error", { "minItems": 2}],
         "array-element-newline": ["error", {"minItems": 2}],
         "object-curly-newline": ["error", {
-          "ObjectExpression": { "multiline": true, "minProperties": 1 },
+          "ObjectExpression": { "multiline": true, "minProperties": 2 },
           "ObjectPattern": { "multiline": true, "minProperties": 2 },
           "ImportDeclaration": { "multiline": true, "minProperties": 2 }
         }],
