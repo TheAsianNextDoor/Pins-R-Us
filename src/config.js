@@ -24,7 +24,10 @@ export const config = {
     // for artistry purchase
     userArtistry: {
         website: 'artistry',
-        items: ['Ocean Man x "Lion Breath"'],
+        items: [
+            'Ocean Man x "Lion Breath"',
+            'Ocean Man x "Lion Breath"',
+        ],
         email: 'ok@gmail.com',
         firstName: 'Barrack',
         lastName: 'Obama',

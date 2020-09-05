@@ -1,8 +1,21 @@
 import commander from 'commander';
-import { exec } from 'child_process';
+import { fork } from 'child_process';
 import { exit } from 'process';
 import { config } from './config';
-import { preCheckOptionsForSingleUser } from './buyHelperFunctions';
+import {
+    preCheckOptionsForSingleUser,
+    buildCommanderOptions,
+} from './buyHelperFunctions';
+import {
+    stringifyObjectWithColor,
+    stringWithColor,
+} from './utilities/stringUtils';
+
+// determines if script is a child process
+let isChildProcess = false;
+if (process.argv.includes('isChild')) {
+    isChildProcess = true;
+}
 
 commander
     .description(
@@ -43,24 +56,40 @@ const optionsToCheck = {
 
 preCheckOptionsForSingleUser(optionsToCheck);
 
+const commanderOptions = buildCommanderOptions({
+    website,
+    user,
+    dateTime,
+    now,
+});
 
-let parsedCommand = `npm run buyItem -- --website "${website}" --user "${user}"`;
-if (dateTime) {
-    parsedCommand += ` --date-time "${dateTime}"`;
+
+if (!isChildProcess) {
+    // Message to warn user to double check values
+    console.log(`ENSURE COMMANDER OPTIONS ARE CORRECT:\n${stringifyObjectWithColor(commander.opts())}\n`);
+    console.log(`ENSURE CONFIG OBJECT IS CORRECT:\n${stringifyObjectWithColor(config[user])}`);
+    console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
 }
-if (now) {
-    parsedCommand += ` --now`;
-}
+
+
+// tracks number of exited child processes
+let exitedChildProcesses = 0;
 
 for (let i = 0; i < items.length; i += 1) {
-    exec(`${parsedCommand} --item ${items[i]}`, (err, stdout, stderr) => {
-        console.log(stdout);
-        if (err) {
-            console.log(err);
+    const forkedProcess = fork(
+        `./src/buyItemCommand.js`,
+        [
+            ...commanderOptions,
+            '--item',
+            items[i],
+        ],
+    );
+
+    // eslint-disable-next-line no-loop-func
+    forkedProcess.on('exit', () => {
+        exitedChildProcesses += 1;
+        if (exitedChildProcesses === items.length) {
+            exit(0);
         }
-        if (stderr) {
-            console.log(stderr);
-        }
-        exit(0);
     });
 }

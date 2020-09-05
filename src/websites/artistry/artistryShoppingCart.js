@@ -17,8 +17,6 @@ export default class ArtistryShoppingCart {
      */
     clickCheckout = async () => {
         await this.checkoutButton.click();
-        return new ShopifyInformation({
-            isEmailOrPhone: true,
-        });
+        return new ShopifyInformation({ isEmailOrPhone: true });
     };
 }

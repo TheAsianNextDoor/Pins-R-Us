@@ -29,7 +29,7 @@ const rl = readline.createInterface({
 /**
  * Ensures that the website is on the supported list
  *
- * @param {string[]} websiteArray The website to buy something from
+ * @param {string} website The website to buy something from
  */
 export const ensureSupportedWebsite = (website) => {
     if (!supportedWebsites.some((site) => site === website)) {
@@ -246,4 +246,43 @@ export const preCheckOptionsForMultiUser = (options) => {
     }
 
     ensureSupportedWebsiteArray(websites);
+};
+
+/**
+ * Takes commander and config file strings and arranges them into a commander parsable
+ * options array
+ *
+ * @param {Object} param0 Args to append into commander parse-able array
+ * @returns {string[]}
+ */
+export const buildCommanderOptions = ({
+    website,
+    user,
+    dateTime,
+    now,
+}) => {
+    const commanderOptions = [];
+    if (website) {
+        commanderOptions.push(
+            '--website',
+            website,
+        );
+    }
+    if (user) {
+        commanderOptions.push(
+            '--user',
+            user,
+        );
+    }
+    if (dateTime) {
+        commanderOptions.push(
+            '--date-time',
+            dateTime,
+        );
+    }
+    if (now) {
+        commanderOptions.push('--now');
+    }
+
+    return commanderOptions;
 };
