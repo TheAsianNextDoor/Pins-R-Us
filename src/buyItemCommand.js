@@ -12,9 +12,6 @@ import {
     scheduleAsyncFunction,
     executeAsyncFunction,
 } from './utilities/scheduleUtils';
-import {
-    stringifyObjectWithColor, stringWithColor,
-} from './utilities/stringUtils';
 
 commander
     .description('Purchase an item from a website at a given date and time in the future or immediately')
@@ -53,11 +50,6 @@ const {
 // parse iso8601 string into Date Object for scheduleAsyncFunction
 const parsedDateTime = parseISO(dateTime);
 
-
-// Message to warn user to double check values
-console.log(`ENSURE OPTIONS ARE CORRECT:\n\n${stringifyObjectWithColor(commander.opts())}`);
-console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
-
 (async () => {
     if (dateTime) {
         // schedule driver initialization 15 seconds before inputted time
@@ -65,9 +57,7 @@ console.log(`\nIf they are not correct, kill script with command: ${stringWithCo
             async () => initializeDriver(),
             sub(
                 parsedDateTime,
-                {
-                    seconds: 15,
-                },
+                { seconds: 15 },
             ),
         );
 
@@ -76,9 +66,7 @@ console.log(`\nIf they are not correct, kill script with command: ${stringWithCo
             async () => executePurchase[website](user, item),
             sub(
                 parsedDateTime,
-                {
-                    seconds: 2,
-                },
+                { seconds: 2 },
             ),
             true,
         );

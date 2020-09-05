@@ -16,9 +16,7 @@ import { wait } from './waitUtils';
  * Bridge Mode enables Selenium to interact with older web browsers
  * @returns {Actions}
  */
-const getActions = () => getDriver().actions({
-    bridge: true,
-});
+const getActions = () => getDriver().actions({ bridge: true });
 
 /**
  * Scrolls the WebElement into view
