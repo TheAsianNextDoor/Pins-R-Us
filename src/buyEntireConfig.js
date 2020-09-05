@@ -1,8 +1,15 @@
 import commander from 'commander';
-import { exec } from 'child_process';
+import { fork } from 'child_process';
 import { exit } from 'process';
 import { config } from './config';
-import { preCheckOptionsForMultiUser } from './buyHelperFunctions';
+import {
+    preCheckOptionsForMultiUser,
+    buildCommanderOptions,
+} from './buyHelperFunctions';
+import {
+    stringifyObjectWithColor,
+    stringWithColor,
+} from './utilities/stringUtils';
 
 commander
     .description(
@@ -27,33 +34,44 @@ const {
 const configArray = Object.entries(config);
 
 const websites = configArray.map((entry) => entry[1].website);
-const userArray = configArray.map((entry) => entry[0]);
+const users = configArray.map((entry) => entry[0]);
 const optionsToCheck = {
     ...commander.opts(),
-    ...{
-        websites,
-    },
+    ...{ websites },
 };
 
 preCheckOptionsForMultiUser(optionsToCheck);
 
-for (let i = 0; i < userArray.length; i += 1) {
-    const user = userArray[i];
-    let parsedCommand = `npm run buyAllItemsForUser -- --user "${user}"`;
-    if (dateTime) {
-        parsedCommand += ` --date-time "${dateTime}"`;
-    }
-    if (now) {
-        parsedCommand += ` --now`;
-    }
-    exec(`${parsedCommand}`, (err, stdout, stderr) => {
-        console.log(stdout);
-        if (err) {
-            console.log(err);
+
+// Message to warn user to double check values
+console.log(`ENSURE COMMANDER OPTIONS ARE CORRECT:\n${stringifyObjectWithColor(commander.opts())}\n`);
+console.log(`ENSURE CONFIG OBJECT IS CORRECT:\n${stringifyObjectWithColor(config)}`);
+console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
+
+// tracks number of exited child processes
+let exitedChildProcesses = 0;
+
+for (let i = 0; i < users.length; i += 1) {
+    const user = users[i];
+    const commanderOptions = buildCommanderOptions({
+        user,
+        dateTime,
+        now,
+    });
+
+    const forkedProcess = fork(
+        `./src/buyAllItemsForUserCommand.js`,
+        [
+            ...commanderOptions,
+            'isChild',
+        ],
+    );
+
+    // eslint-disable-next-line no-loop-func
+    forkedProcess.on('exit', () => {
+        exitedChildProcesses += 1;
+        if (exitedChildProcesses === users.length) {
+            exit(0);
         }
-        if (stderr) {
-            console.log(stderr);
-        }
-        exit(0);
     });
 }

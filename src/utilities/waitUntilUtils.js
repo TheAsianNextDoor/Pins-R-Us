@@ -15,9 +15,7 @@ import { refreshPage } from './navigationUtils';
 import { ByArray } from './byUtils';
 import { stringifyObjectWithColor } from './stringUtils';
 
-export const waitUntilElementNotFound = {
-    toString: () => 'waitUntil ElementNotFound',
-};
+export const waitUntilElementNotFound = { toString: () => 'waitUntil ElementNotFound' };
 
 /**
  * Waits until a WebElement is visible or the maximum time has elapsed
@@ -107,9 +105,7 @@ export const refreshPageUntilElementIsLocated = async (
                     throw new Error(`Could not refresh page and find element with by ${stringifyObjectWithColor(by)}`);
                 }
             },
-            {
-                maxRetryTime: timeout,
-            },
+            { maxRetryTime: timeout },
         );
     } catch (e) {
         if (shouldThrowError) {

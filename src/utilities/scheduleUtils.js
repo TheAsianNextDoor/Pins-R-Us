@@ -30,8 +30,8 @@ export const scheduleAsyncFunction = (
             console.log(`Root error: ${stringWithColor(e, 'red')}`);
         })
         .finally(async () => {
+            await wait(2000);
             console.log('Exiting Script\n');
-            await wait(5000);
             await killDriver();
             if (shouldExit) {
                 exit(0);
@@ -56,8 +56,8 @@ export const executeAsyncFunction = async (func) => func()
         console.log(`Root error: ${stringWithColor(e, 'red')}`);
     })
     .finally(async () => {
+        await wait(2000);
         console.log('Exiting Script\n');
-        await wait(5000);
         await killDriver();
         exit(0);
     });
