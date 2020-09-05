@@ -1,17 +1,13 @@
-import { exec } from 'child_process';
 import commander from 'commander';
+import { exec } from 'child_process';
 import { exit } from 'process';
 import { config } from './config';
-import { preCheckOptions } from './buyHelperFunctions';
+import { preCheckOptionsForSingleUser } from './buyHelperFunctions';
 
 commander
     .description(
-        'Spawns a child process that calls the buyCommand, '
-        + 'for each entry in the "items" key in the config object',
-    )
-    .requiredOption(
-        '-w, --website <website>',
-        'The website to execute the purchase on',
+        `Spawns a child process that calls the buyItemCommand, \
+        for each entry in the "items" key for a specific user's config object`,
     )
     .requiredOption(
         '-u, --user <user>',
@@ -27,17 +23,28 @@ commander
     )
     .parse(process.argv);
 
-preCheckOptions(commander.opts());
-
+// commander options
 const {
     user,
-    website,
     dateTime,
     now,
 } = commander;
-const { items } = config[user];
 
-let parsedCommand = `npm run buy -- --website "${website}" --user "${user}"`;
+// config values
+const {
+    items,
+    website,
+} = config[user];
+
+const optionsToCheck = {
+    ...commander.opts(),
+    website,
+};
+
+preCheckOptionsForSingleUser(optionsToCheck);
+
+
+let parsedCommand = `npm run buyItem -- --website "${website}" --user "${user}"`;
 if (dateTime) {
     parsedCommand += ` --date-time "${dateTime}"`;
 }

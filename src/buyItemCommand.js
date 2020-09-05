@@ -5,7 +5,7 @@ import {
 } from 'date-fns';
 import {
     executePurchase,
-    preCheckOptions,
+    preCheckOptionsForSingleUser,
 } from './buyHelperFunctions';
 import { initializeDriver } from './driver';
 import {
@@ -17,7 +17,7 @@ import {
 } from './utilities/stringUtils';
 
 commander
-    .description('Purchase an item from a website at a given date and time in the future')
+    .description('Purchase an item from a website at a given date and time in the future or immediately')
     .requiredOption(
         '-w, --website <website>',
         'The website to execute the purchase on',
@@ -40,7 +40,7 @@ commander
     )
     .parse(process.argv);
 
-preCheckOptions(commander.opts());
+preCheckOptionsForSingleUser(commander.opts());
 
 const {
     user,

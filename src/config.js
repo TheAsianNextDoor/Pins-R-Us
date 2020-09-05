@@ -4,11 +4,10 @@
 export const config = {
     // for lotu purchase
     userLotu: {
+        website: 'lotu',
         items: [
             '"Peyotero" 3D 2 Piece Hat Pin Sets',
             'Psyonica 3D Hat Pins',
-            '"Peyotero" 3D 2 Piece Hat Pin Sets',
-            '"Peyotero" 3D 2 Piece Hat Pin Sets',
         ],
         email: 'blah@gmail.com',
         firstName: 'Donald',
@@ -24,6 +23,7 @@ export const config = {
     },
     // for artistry purchase
     userArtistry: {
+        website: 'artistry',
         items: ['Ocean Man x "Lion Breath"'],
         email: 'ok@gmail.com',
         firstName: 'Barrack',

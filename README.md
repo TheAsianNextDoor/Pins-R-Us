@@ -57,56 +57,35 @@ Currently automated process:
 ## Config
 File location: **./src/config.js**
 
-Each primary depth key is used as identification to its value object that houses the secondary depth keys, which its keys and values are used as credentials, shipping, and payment information.
+Ensure all values are correct before running script
 
-- **item** - name of item to purchase (must escape all quotations with ' \\' character)
-- **email** - email to purchase item with  
-- **firstName** - first name of purchaser
-- **lastName** - last name of purchaser
-- **address** - address to ship to
-- **city** - city to ship to
-- **state** - state to ship to
-- **zip** - zip to ship to
-- **cardNumber** - card to use for purchase
-- **cardNameOn** - the name on the card
-- **cardExpirationDate** - the expiration date of the card
-- **cardSecurityCode** - the security code of the card
+Each primary depth key is used as identification to its user value, which can be references by the commander scripts. The secondary depth keys are used as website, credentials, shipping, and payment information.
+
+- **items** {Array} - name of items to purchase
+- **email** {String} - email to purchase item with
+- **firstName** {String} - first name of purchaser
+- **lastName** {String} - last name of purchaser
+- **address** {String} - address to ship to
+- **city** {String} - city to ship to
+- **state** {String} - state to ship to
+- **zip** {String} - zip to ship to
+- **cardNumber** {String} - card to use for purchase
+- **cardNameOn** {String} - the name on the card
+- **cardExpirationDate** {String} - the expiration date of the card. Must be in format with spaces before and after slash `<num><num> / <num><num>`
+- **cardSecurityCode** {String} - the security code of the card
 
 <br>
 
 ## Execution
 
-### Single Purchase
-
-**Commander options:**
-
-- **-w**, **--website [website]** | (required) Which website to purchase on, expects string
-- **-u**, **--user [user]** | (required) Which user to purchase item with, expects string
-- **-i**, **--item [item]** | (required) The text of the item to purchase, expects string
-- **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format: *YYYY-MM-DD HH:mm:ss*
-- **-n**, **--now** | Execute script immediately, flag variable
-
-*Must pass in either --now or --date-time, not both*
-
-**Examples:**
-
- - Scheduled script: 
-   - `npm run buy -- -w "lotu" --date-time "2020-08-23 14:04:30" -u "user1" --item "Hat Pin"` 
-   - `npm run buy -- --website "artistry" -dt "2020-08-23 14:04:30" --user "user2" -i "Hat Pin"`
-
-- Immediate script: 
-  - `npm run buy -- --website "lotu" -n -u "user1" --item "Hat Pin"`
-  - `npm run buy -- -w "artistry" --now --user "user2" -i "Hat Pin"`
-
-### Multi Purchase
+### Purchase All Items For User
 
 Items to purchase are configured in ./src/config under the "items" key
 
 **Commander options:**
 
-- **-w**, **--website [website]** | (required) Which website to purchase on, expects string
 - **-u**, **--user [user]** | (required) Which user to purchase item with, expects string
-- **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format: *YYYY-MM-DD HH:mm:ss*
+- **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format: *yyyy-MM-dd HH:mm:ss*
 - **-n**, **--now** | Execute script immediately, flag variable
 
 *Must pass in either --now or --date-time, not both*
@@ -114,12 +93,33 @@ Items to purchase are configured in ./src/config under the "items" key
 **Examples:**
 
  - Scheduled script: 
-   - `npm run multiBuy -- -w "lotu" --date-time "2020-08-23 14:04:30" -u "user1"` 
-   - `npm run multiBuy -- --website "artistry" -dt "2020-08-23 14:04:30" --user "user2"`
+   - `npm run buyAllItemsForUser -- --date-time "2020-08-23 14:04:30" -u "user1"` 
+   - `npm run buyAllItemsForUser -- -dt "2020-08-23 14:04:30" --user "user2"`
 
 - Immediate script: 
-  - `npm run multiBuy -- --website "lotu" -n -u "user1"`
-  - `npm run multiBuy -- -w "artistry" --now --user "user2"`
+  - `npm run buyAllItemsForUser -- -n -u "user1"`
+  - `npm run buyAllItemsForUser -- --now --user "user2"`
+
+### Purchase Entire Config
+
+Ensure that every entry in the config file is correct
+
+**Commander options:**
+
+- **-d**, **--date-time [dateTime]** | Execute script at given date time, expects iso 8601 format: *yyyy-MM-dd HH:mm:ss*
+- **-n**, **--now** | Execute script immediately, flag variable
+
+*Must pass in either --now or --date-time, not both*
+
+**Examples:**
+
+ - Scheduled script: 
+   - `npm run buyEntireConfig -- --date-time "2020-08-23 14:04:30"` 
+   - `npm run buyEntireConfig -- -dt "2020-08-23 14:04:30"`
+
+- Immediate script: 
+  - `npm run buyEntireConfig -- -n`
+  - `npm run buyEntireConfig -- --now`
 
 <br>
 
