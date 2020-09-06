@@ -71,7 +71,7 @@ Each primary depth key is used as identification to its user value, which can be
 - **zip** {String} - zip to ship to
 - **cardNumber** {String} - card to use for purchase
 - **cardNameOn** {String} - the name on the card
-- **cardExpirationDate** {String} - the expiration date of the card. Must be in format with spaces before and after slash `<num><num> / <num><num>`
+- **cardExpirationDate** {String} - the expiration date of the card. Must be in format with spaces before and after slash `[0-9][0-9] / [0-9][0-9]`
 - **cardSecurityCode** {String} - the security code of the card
 
 <br>
