@@ -1,3 +1,4 @@
+import sleep from 'sleep-promise';
 import {
     click,
     getValue,
@@ -10,7 +11,6 @@ import {
     containsNormalizedText,
 } from '../utilities/byUtils';
 import { basicRetry } from '../utilities/retryUtils';
-import { wait } from '../utilities/waitUtils';
 
 export default class Select {
     constructor(rootBy) {
@@ -43,7 +43,7 @@ export default class Select {
     clickOption = async (optionText) => {
         await this.clickSelect();
         console.log('Waiting 3 seconds');
-        await wait(3000);
+        await sleep(3000);
         console.log('Done Waiting');
         const optionBy = this.getOptionByFromText(optionText);
         console.log(`Attempting to click option locator: ${optionBy}`);

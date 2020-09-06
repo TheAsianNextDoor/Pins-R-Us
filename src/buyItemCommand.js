@@ -3,6 +3,7 @@ import {
     parseISO,
     sub,
 } from 'date-fns';
+import sleep from 'sleep-promise';
 import {
     executePurchase,
     preCheckOptionsForSingleUser,
@@ -71,6 +72,8 @@ const parsedDateTime = parseISO(dateTime);
             true,
         );
     } else if (now) {
+        // sleep 5 seconds to give user time to double check config
+        await sleep(5000);
         await initializeDriver();
         await executeAsyncFunction(async () => executePurchase[website](user, item));
     }

@@ -1,5 +1,4 @@
 import { getDriver } from '../driver';
-import { wait } from './waitUtils';
 
 /**
  * Variable for keeping track of whether or not we are in an iFrame
@@ -29,7 +28,6 @@ export const setCurrentlyInFrame = (bool) => { currentlyInFrame = bool; };
 export const switchToDefaultFrame = async () => {
     await getDriver().switchTo().defaultContent();
     setCurrentlyInFrame(false);
-    await wait(100);
 };
 
 /**
@@ -41,5 +39,4 @@ export const switchToDefaultFrame = async () => {
 export const switchToFrame = async (frameElement) => {
     await getDriver().switchTo().frame(frameElement);
     setCurrentlyInFrame(true);
-    await wait(100);
 };

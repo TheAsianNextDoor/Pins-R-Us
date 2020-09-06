@@ -1,9 +1,9 @@
 import { exit } from 'process';
 import { scheduleJob } from 'node-schedule';
+import sleep from 'sleep-promise';
 import { getRetryError } from './retryUtils';
 import { stringWithColor } from './stringUtils';
 import { killDriver } from '../driver';
-import { wait } from './waitUtils';
 import { getBooleanEnvVariable } from '../environmentVariables';
 
 const shouldExitChrome = getBooleanEnvVariable('shouldExitChrome');
@@ -33,15 +33,15 @@ export const scheduleAsyncFunction = (
             console.log(`Root error: ${stringWithColor(e, 'red')}`);
         })
         .finally(async () => {
-            await wait(2000);
-            console.log('Exiting Script\n');
+            await sleep(2000);
             if (shouldExitChrome) {
-                await wait(5000);
+                console.log('Exiting Script\n');
                 await killDriver();
                 if (shouldExit) {
                     exit(0);
                 }
             }
+            console.log('\nLeaving Chrome open, press ctrl + c to exit script');
         }),
 );
 
@@ -62,11 +62,11 @@ export const executeAsyncFunction = async (func) => func()
         console.log(`Root error: ${stringWithColor(e, 'red')}`);
     })
     .finally(async () => {
-        await wait(2000);
-        console.log('Exiting Script\n');
+        await sleep(2000);
         if (shouldExitChrome) {
-            await wait(5000);
+            console.log('Exiting Script\n');
             await killDriver();
             exit(0);
         }
+        console.log('\nLeaving Chrome open, press ctrl + c to exit script');
     });

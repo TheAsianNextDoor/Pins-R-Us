@@ -64,6 +64,7 @@ export const userJsonSchema = {
     title: 'User',
     description: 'Json schema for the user\'s desired website, items, shipping, and payment information',
     type: 'object',
+    additionalProperties: false,
     properties: {
         website: {
             description: 'The website to purchase the item from',
