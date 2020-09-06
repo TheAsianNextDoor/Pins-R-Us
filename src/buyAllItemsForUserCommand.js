@@ -1,7 +1,12 @@
 import commander from 'commander';
+import { Validator } from 'jsonschema';
 import { fork } from 'child_process';
 import { exit } from 'process';
-import { config } from './config';
+import {
+    config,
+    userJsonSchema,
+    configJsonSchema,
+} from './config';
 import {
     preCheckOptionsForSingleUser,
     buildCommanderOptions,
@@ -16,6 +21,7 @@ let isChildProcess = false;
 if (process.argv.includes('isChild')) {
     isChildProcess = true;
 }
+const jsonSchemaValidator = new Validator();
 
 commander
     .description(
@@ -35,6 +41,17 @@ commander
         'If true executes buy immediately',
     )
     .parse(process.argv);
+
+// parent process already validated
+if (!isChildProcess) {
+    // validate Json schema of config object
+    jsonSchemaValidator.addSchema(userJsonSchema, '/user');
+    jsonSchemaValidator.validate(
+        config,
+        configJsonSchema,
+        { throwError: true },
+    );
+}
 
 // commander options
 const {

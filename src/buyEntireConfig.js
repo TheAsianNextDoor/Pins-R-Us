@@ -1,7 +1,12 @@
 import commander from 'commander';
 import { fork } from 'child_process';
 import { exit } from 'process';
-import { config } from './config';
+import { Validator } from 'jsonschema';
+import {
+    config,
+    userJsonSchema,
+    configJsonSchema,
+} from './config';
 import {
     preCheckOptionsForMultiUser,
     buildCommanderOptions,
@@ -10,6 +15,8 @@ import {
     stringifyObjectWithColor,
     stringWithColor,
 } from './utilities/stringUtils';
+
+const jsonSchemaValidator = new Validator();
 
 commander
     .description(
@@ -24,6 +31,14 @@ commander
         'If true executes buy immediately',
     )
     .parse(process.argv);
+
+// validate json schema of config object
+jsonSchemaValidator.addSchema(userJsonSchema, '/user');
+jsonSchemaValidator.validate(
+    config,
+    configJsonSchema,
+    { throwError: true },
+);
 
 // commander options
 const {
@@ -41,7 +56,6 @@ const optionsToCheck = {
 };
 
 preCheckOptionsForMultiUser(optionsToCheck);
-
 
 // Message to warn user to double check values
 console.log(`ENSURE COMMANDER OPTIONS ARE CORRECT:\n${stringifyObjectWithColor(commander.opts())}\n`);

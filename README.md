@@ -148,15 +148,18 @@ A brief descriptions of important *./src* directories and files:
   - waitUntilUtils.js
     - Functions that utilize Seleniums wait logic
   
-- **buyCommand.js**
-  - The root of execution for single purchase. Receives options, parses, and passes them through to control flow for each website
+- **buyItemCommand.js**
+  - Script for purchasing a single item. Receives options, parses, and passes them through to control flow for each website
 
-- **multiBuyCommand.js**
-  - Wrapper for buyCommand.js and root of execution for multi purchase. Spawns a child process for each item and runs the buyCommand script
+- **buyAllItemsForUserCommand.js**
+  - Script for purchasing all items for a specific user. Forks the main process and creates a child process with buyItemCommand.js
+
+- **buyEntireConfigCommand.js**
+  - Script for purchasing all items for all users in the config file. Forks the main process and creates a child process with buyAllItemsForUserCommand.js
   
 - **buyHelperFunctions.js**
   - Control flow for each website
-  - Misc parsing functions for *buyCommand.js*
+  - Misc parsing functions for commander scripts
   
 <br>
 
@@ -170,6 +173,7 @@ Npm modules:
 - [commander](https://www.npmjs.com/package/commander)
 - [date-fns](https://www.npmjs.com/package/date-fns)
 - [node-schedule](https://www.npmjs.com/package/node-schedule)
+- [jsonschema](https://www.npmjs.com/package/jsonschema)
 - [bluebird](https://www.npmjs.com/package/bluebird)
 - [dotenv-flow](https://www.npmjs.com/package/dotenv-flow)
 - [boxen](https://www.npmjs.com/package/boxen)
