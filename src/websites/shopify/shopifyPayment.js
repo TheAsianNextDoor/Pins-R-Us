@@ -7,7 +7,9 @@ import {
     containsNormalizedClass,
     containsNormalizedText,
 } from '../../utilities/byUtils';
-import { stringWithColor } from '../../utilities/stringUtils';
+import { getBooleanEnvVariable } from '../../environmentVariables';
+
+const shouldPurchase = getBooleanEnvVariable('shouldPurchase');
 
 export default class ShopifyPayment {
     constructor() {
@@ -64,17 +66,12 @@ export default class ShopifyPayment {
         cardExpirationDate,
         cardSecurityCode,
     }) => {
-        if (
-            !cardNumber
-            || !cardNameOn
-            || !cardExpirationDate
-            || !cardSecurityCode
-        ) {
-            throw new Error(stringWithColor('Must pass in all payment fields, check config.js', 'red'));
-        }
         await this.cardNumber.sendKeysOneAtATime(cardNumber);
         await this.cardNameOn.sendKeysOneAtATime(cardNameOn);
         await this.cardExpirationDate.sendKeysOneAtATime(cardExpirationDate);
         await this.cardSecurityCode.sendKeysOneAtATime(cardSecurityCode);
+        if (shouldPurchase) {
+            await this.payNowButton.click();
+        }
     };
 }

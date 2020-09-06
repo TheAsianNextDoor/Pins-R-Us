@@ -4,6 +4,9 @@ import { getRetryError } from './retryUtils';
 import { stringWithColor } from './stringUtils';
 import { killDriver } from '../driver';
 import { wait } from './waitUtils';
+import { getBooleanEnvVariable } from '../environmentVariables';
+
+const shouldExitChrome = getBooleanEnvVariable('shouldExitChrome');
 
 /**
  * Executes an asynchronous function in the future
@@ -32,9 +35,12 @@ export const scheduleAsyncFunction = (
         .finally(async () => {
             await wait(2000);
             console.log('Exiting Script\n');
-            await killDriver();
-            if (shouldExit) {
-                exit(0);
+            if (shouldExitChrome) {
+                await wait(5000);
+                await killDriver();
+                if (shouldExit) {
+                    exit(0);
+                }
             }
         }),
 );
@@ -58,6 +64,9 @@ export const executeAsyncFunction = async (func) => func()
     .finally(async () => {
         await wait(2000);
         console.log('Exiting Script\n');
-        await killDriver();
-        exit(0);
+        if (shouldExitChrome) {
+            await wait(5000);
+            await killDriver();
+            exit(0);
+        }
     });
