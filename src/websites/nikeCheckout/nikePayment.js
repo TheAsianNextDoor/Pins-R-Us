@@ -7,7 +7,9 @@ import {
     containsNormalizedClass,
     containsNormalizedText,
 } from '../../utilities/byUtils';
-import { stringWithColor } from '../../utilities/stringUtils';
+import { getBooleanEnvVariable } from '../../environmentVariables';
+
+const shouldPurchase = getBooleanEnvVariable('shouldPurchase');
 
 export default class NikePayment {
     constructor() {
@@ -21,9 +23,18 @@ export default class NikePayment {
             containsNormalizedClass('review-block__content')
         } and @data-review-section = 'shipping-cost']`);
 
-        this.cardNumberBy = by.id('creditCardNumber')
-        this.cardExpirationDateBy = by.id('expirationDate');
-        this.cardSecurityCodeBy = by.id('cvNumber');
+        this.cardNumberBy = addBys(
+            by.xpath('//iframe[@title = "Credit Card Form"]'),
+            by.id('creditCardNumber'),
+        );
+        this.cardExpirationDateBy = addBys(
+            by.xpath('//iframe[@title = "Credit Card Form"]'),
+            by.id('expirationDate'),
+        );
+        this.cardSecurityCodeBy = addBys(
+            by.xpath('//iframe[@title = "Credit Card Form"]'),
+            by.id('cvNumber'),
+        );
 
         this.payNowButtonBy = by.xpath(`//span[${
             containsNormalizedText('Pay now')
@@ -49,15 +60,11 @@ export default class NikePayment {
         cardExpirationDate,
         cardSecurityCode,
     }) => {
-        if (
-            !cardNumber
-            || !cardExpirationDate
-            || !cardSecurityCode
-        ) {
-            throw new Error(stringWithColor('Must pass in all payment fields, check config.js', 'red'));
-        }
         await this.cardNumber.sendKeysOneAtATime(cardNumber);
         await this.cardExpirationDate.sendKeysOneAtATime(cardExpirationDate);
         await this.cardSecurityCode.sendKeysOneAtATime(cardSecurityCode);
+        if (shouldPurchase) {
+            await this.payNowButton.click();
+        }
     };
 }

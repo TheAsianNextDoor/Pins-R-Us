@@ -20,7 +20,7 @@ export const supportedWebsites = [
     'lotu',
     'pookster',
     'artistry',
-    'nike'
+    'nike',
 ];
 
 const rl = readline.createInterface({
@@ -154,12 +154,13 @@ const nikePurchase = async (user, item) => {
     } catch (e) {
         throw new Error(stringWithColor(`Tile name did not match anything on Nike page \n\n${e}`, 'red'));
     }
-    await nikeProduct.clickSize(7, 'male');
-    const nikeShoppingCart = await nikeProduct.clickShoppingCart();
-    const nikeInfo = await nikeShoppingCart.clickCheckout();
+    await nikeProduct.clickSize(8, 'male');
+    const nikeShoppingCart = await nikeProduct.clickAddToCart();
+    let nikeInfo = await nikeShoppingCart.clickShoppingCart();
+    nikeInfo = await nikeShoppingCart.clickCheckout();
     const nikeShipping = await nikeInfo.expressCheckout(config[user]);
     const nikePayment = await nikeShipping.clickContinueToPayment();
-    await nikePayment.expressPay(user);
+    await nikePayment.expressPay(config[user]);
 };
 
 /**

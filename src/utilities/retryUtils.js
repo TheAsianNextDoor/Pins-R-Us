@@ -9,7 +9,7 @@ import {
 import { stringWithColor } from './stringUtils';
 
 // environment variables
-const defaultRetryTime = getIntEnvVariable('defaultRetryTime');
+const defaultRetryTimeout = getIntEnvVariable('defaultRetryTimeout');
 
 /**
  * A special variable to track if an error was thrown in retry loops
@@ -82,7 +82,7 @@ export const configurableRetryConfig = ({
     factor = 1,
     minTimeout = 1,
     maxTimeout = 1,
-    maxRetryTime = defaultRetryTime,
+    maxRetryTime = defaultRetryTimeout,
     onRetryFunc = () => {},
 } = {}) => ({
     forever,

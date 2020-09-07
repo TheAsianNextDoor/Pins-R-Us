@@ -7,7 +7,6 @@ import NikeShipping from './nikeShipping';
 
 export default class NikeInformation {
     constructor() {
-        const checkoutPrefix = 'checkout_shipping_address_';
         this.emailBy = by.id('email');
         this.phoneNumberBy = by.id('phoneNumber');
         this.emailOrPhoneBy = by.id('checkout_email_or_phone');
@@ -40,6 +39,7 @@ export default class NikeInformation {
      */
     expressCheckout = async ({
         email,
+        phoneNumber,
         firstName,
         lastName,
         address,
@@ -49,6 +49,7 @@ export default class NikeInformation {
     }) => {
         if (
             !email
+            || !phoneNumber
             || !firstName
             || !lastName
             || !address
@@ -59,6 +60,7 @@ export default class NikeInformation {
             throw new Error(stringWithColor('Must pass in all checkout fields, check config.js', 'red'));
         }
         await this.email.sendKeys(email);
+        await this.phoneNumber.sendKeysAndTabOff(phoneNumber);
         await this.firstName.sendKeysAndTabOff(firstName);
         await this.lastName.sendKeysAndTabOff(lastName);
         await this.address.sendKeysAndTabOff(address);

@@ -38,6 +38,22 @@ export const config = {
         cardExpirationDate: '01 / 01',
         cardSecurityCode: '1234',
     },
+    userNike: {
+        website: 'nike',
+        items: ['Air Zoom-Type'],
+        email: 'ok@gmail.com',
+        phoneNumber: '(123) 456-7890',
+        firstName: 'Barrack',
+        lastName: 'Obama',
+        address: '6419 Detroit Avenue',
+        city: 'Cleveland',
+        state: 'Ohio',
+        zip: '44102',
+        cardNumber: '1234 1234 1234 1234',
+        cardNameOn: 'Barrack Obama',
+        cardExpirationDate: '01/01',
+        cardSecurityCode: '123',
+    },
 };
 
 /**
@@ -81,6 +97,11 @@ export const userJsonSchema = {
             description: 'The email to purchase the item with',
             type: 'string',
             required: true,
+        },
+        phoneNumber: {
+            description: 'The phone number to purchase the item with',
+            type: 'string',
+            required: false,
         },
         firstName: {
             description: 'The first name to purchase the item with',
@@ -126,7 +147,7 @@ export const userJsonSchema = {
             description: 'The expiration date of the card',
             type: 'string',
             required: true,
-            pattern: '[0-9][0-9] / [0-9][0-9]',
+            pattern: '[0-9][0-9]( )?/( )?[0-9][0-9]',
         },
         cardSecurityCode: {
             description: 'The security code of the card',
@@ -134,18 +155,4 @@ export const userJsonSchema = {
             required: true,
         },
     },
-    userNike: {
-        items: ['Air Zoom-Type'],
-        email: 'ok@gmail.com',
-        firstName: 'Barrack',
-        lastName: 'Obama',
-        address: '6419 Detroit Avenue',
-        city: 'Cleveland',
-        state: 'Ohio',
-        zip: '44102',
-        cardNumber: '1234123412341234',
-        cardNameOn: 'Barrack Obama',
-        cardExpirationDate: '01 / 01',
-        cardSecurityCode: '123',
-    }
 };

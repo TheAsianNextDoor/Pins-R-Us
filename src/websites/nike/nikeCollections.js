@@ -1,17 +1,14 @@
 import { navToURL } from '../../utilities/navigationUtils';
-import {
-    by,
-    ancestorAtPosition,
-    textContainsNormalizedQuotes,
-} from '../../utilities/byUtils';
+import { by } from '../../utilities/byUtils';
 import NikeProduct from './nikeProduct';
 import { refreshPageUntilElementIsLocated } from '../../utilities/waitUntilUtils';
-import Button from '../../controls/button';
+import Link from '../../controls/link';
 
 export default class NikeCollections {
     constructor() {
         this.url = 'https://www.nike.com/launch';
     }
+
     /**
      * Navigates to the nike SNKRS page
      *
@@ -28,32 +25,30 @@ export default class NikeCollections {
      * @param {String} name The name of the link to retrieve the by of
      * @returns {Promise<By>}
      */
-    getTileBy = (name) => by.xpath(`//img[contains(@alt, "${
+    getTileBy = async (name) => by.xpath(`//a[contains(@aria-label, "${
         name
-    }")]/${
-        ancestorAtPosition('a', 1)
-    }`);
+    }")]`);
 
     /**
      * Retrieves a Link Control given a tile name
      *
      * @param {String} name The name of the link to retrieve the by of
      */
-    getTileLinkByName = (name) => new Button(this.getTileBy(name));
+    getTileLinkByName = async (name) => new Link(await this.getTileBy(name));
 
     /**
      * Clicks a given tile by its name
      *
      * @param {String} name The name of the link to click
-     * @returns {Promise<ArtistryProduct>}
+     * @returns {Promise<NikeProduct>}
      */
     clickTileByName = async (name) => {
         const tileLink = await this.getTileLinkByName(name);
-        await tileLink.click();
+        await tileLink.clickLink();
         return new NikeProduct();
     };
 
-     /**
+    /**
      * Refresh page until an element is visible
      *
      * @param {String} name the name of the link to locate
@@ -61,7 +56,7 @@ export default class NikeCollections {
      */
     refreshPageLocatingTileByName = async (name) => {
         const tileBy = await this.getTileBy(name);
-        console.log(tileBy)
+        console.log(tileBy);
         await refreshPageUntilElementIsLocated(tileBy);
     }
 }
