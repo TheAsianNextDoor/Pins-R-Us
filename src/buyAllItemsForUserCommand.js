@@ -1,6 +1,7 @@
 import commander from 'commander';
 import { Validator } from 'jsonschema';
 import { fork } from 'child_process';
+import { table } from 'table';
 import { exit } from 'process';
 import {
     config,
@@ -84,7 +85,8 @@ const commanderOptions = buildCommanderOptions({
 if (!isChildProcess) {
     // Message to warn user to double check values
     console.log(`ENSURE COMMANDER OPTIONS ARE CORRECT:\n${stringifyObjectWithColor(commander.opts())}\n`);
-    console.log(`ENSURE CONFIG OBJECT IS CORRECT:\n${stringifyObjectWithColor(config[user])}`);
+    console.log(`ENSURE CONFIG OBJECT IS CORRECT:\n`);
+    console.log(table(Object.entries(config[user])));
     console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
 }
 

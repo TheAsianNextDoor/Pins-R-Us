@@ -177,6 +177,7 @@ Npm modules:
 - [bluebird](https://www.npmjs.com/package/bluebird)
 - [sleep-promise](https://www.npmjs.com/package/sleep-promise)
 - [dotenv-flow](https://www.npmjs.com/package/dotenv-flow)
+- [table](https://www.npmjs.com/package/table)
 - [boxen](https://www.npmjs.com/package/boxen)
 - [chalk](https://www.npmjs.com/package/chalk)
 

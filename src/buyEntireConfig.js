@@ -2,6 +2,7 @@ import commander from 'commander';
 import { fork } from 'child_process';
 import { exit } from 'process';
 import { Validator } from 'jsonschema';
+import { table } from 'table';
 import {
     config,
     userJsonSchema,
@@ -59,7 +60,8 @@ preCheckOptionsForMultiUser(optionsToCheck);
 
 // Message to warn user to double check values
 console.log(`ENSURE COMMANDER OPTIONS ARE CORRECT:\n${stringifyObjectWithColor(commander.opts())}\n`);
-console.log(`ENSURE CONFIG OBJECT IS CORRECT:\n${stringifyObjectWithColor(config)}`);
+console.log(`ENSURE CONFIG OBJECT IS CORRECT:\n`);
+Object.keys(config).forEach((user) => console.log(table(Object.entries(config[user]))));
 console.log(`\nIf they are not correct, kill script with command: ${stringWithColor('ctrl + c')}`);
 
 // tracks number of exited child processes
