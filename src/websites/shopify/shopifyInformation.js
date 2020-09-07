@@ -3,7 +3,6 @@ import Input from '../../controls/input';
 import Select from '../../controls/select';
 import { by } from '../../utilities/byUtils';
 import ShopifyShipping from './shopifyShipping';
-import { stringWithColor } from '../../utilities/stringUtils';
 
 export default class ShopifyInformation {
     constructor(
@@ -50,18 +49,6 @@ export default class ShopifyInformation {
         state,
         zip,
     }) => {
-        if (
-            !email
-            || !firstName
-            || !lastName
-            || !address
-            || !city
-            || !state
-            || !zip
-        ) {
-            throw new Error(stringWithColor('Must pass in all checkout fields, check config.js', 'red'));
-        }
-
         if (this.isEmailOrPhone) {
             await this.emailOrPhone.sendKeys(email);
         } else {

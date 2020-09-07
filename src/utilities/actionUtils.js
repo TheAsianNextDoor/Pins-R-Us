@@ -6,19 +6,17 @@ import {
     WebElement,
 } from 'selenium-webdriver';
 import { Promise } from 'bluebird';
+import sleep from 'sleep-promise';
 import { getDriver } from '../driver';
 import { ensureIsWebElement } from './elementUtils';
 import { retryWithElement } from './retryUtils';
-import { wait } from './waitUtils';
 
 /**
  * Retrieves the action chain from the Selenium WebDriver
  * Bridge Mode enables Selenium to interact with older web browsers
  * @returns {Actions}
  */
-const getActions = () => getDriver().actions({
-    bridge: true,
-});
+const getActions = () => getDriver().actions({ bridge: true });
 
 /**
  * Scrolls the WebElement into view
@@ -34,7 +32,7 @@ export const scrollIntoViewIfNeeded = async (webElement) => {
         `,
         webElement,
     );
-    await wait(25);
+    await sleep(25);
 };
 
 /**
@@ -97,7 +95,6 @@ export const sendKeysOneAtATime = async (
             textArray,
             async (char) => {
                 await el.sendKeys(char);
-                await wait(2);
             },
         );
     },
@@ -132,7 +129,6 @@ export const setValue = async (
             el,
             value,
         );
-        await wait(25);
     },
 );
 

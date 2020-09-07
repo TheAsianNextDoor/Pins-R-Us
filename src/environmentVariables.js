@@ -1,7 +1,7 @@
 import dotenvFlow from 'dotenv-flow';
 
 // reads env files and sets vars
-dotenvFlow.config();
+dotenvFlow.config({ silent: true });
 
 /**
  * Returns a string (lowerCase and trimmed) environment variable

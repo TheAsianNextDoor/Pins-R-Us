@@ -10,9 +10,7 @@ import chrome from 'selenium-webdriver/chrome';
 /**
  * The private WebDriver instance
  */
-let webDriver = {
-    message: 'WebDriver has not been initialized yet',
-};
+let webDriver = { message: 'WebDriver has not been initialized yet' };
 
 /**
  * Returns the instance of the initialized Chrome webDriver

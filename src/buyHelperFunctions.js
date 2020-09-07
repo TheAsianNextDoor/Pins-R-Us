@@ -42,6 +42,27 @@ export const ensureSupportedWebsite = (website) => {
     }
 };
 
+/**
+ * Ensures that the every item in the website Array is on the supported list
+ *
+ * @param {string[]} websiteArray The website to buy something from
+ */
+export const ensureSupportedWebsiteArray = (websiteArray) => {
+    if (!websiteArray.some((website) => supportedWebsites.includes(website))) {
+        console.log(`\n'${websiteArray}' ${
+            stringWithColor('ONE OF THESE WEBSITES IS NOT A SUPPORTED WEBSITE', 'redBright')
+        }\nPlease ensure the config file's website keys is\
+        one of the following: ${JSON.stringify(supportedWebsites, null, 4)}
+        \nExiting Script\n`);
+        exit(0);
+    }
+};
+
+/**
+ * Kills script if the user is not defined
+ *
+ * @param {string} user The user key to match in the config file
+ */
 export const ensureUserIsDefined = (user) => {
     if (!Object.keys(config).some((key) => key === user)) {
         logStringWithColor(
@@ -170,12 +191,13 @@ export const executePurchase = {
 };
 
 /**
- * Ensures that all commander values are valid
+ * Kills script if the provided options are not correct
+ * Pre check for buyItemCommand and buyAllItemsForUserCommand
  *
- * @param {Object} options Commander options
+ * @param {Object} options Commander options and config options
  * @returns {void}
  */
-export const preCheckOptions = (options) => {
+export const preCheckOptionsForSingleUser = (options) => {
     const {
         dateTime,
         now,
@@ -206,6 +228,88 @@ export const preCheckOptions = (options) => {
         const parsedDate = parseDate(dateTime);
         ensureFutureDateTime(parsedDate);
     }
+
     ensureSupportedWebsite(website);
     ensureUserIsDefined(user);
+};
+
+
+/**
+ * Kills script if the provided options are not correct
+ * Pre check for buyEntireConfig command
+ *
+ * @param {Object} options Commander options and config options
+ * @returns {void}
+ */
+export const preCheckOptionsForMultiUser = (options) => {
+    const {
+        dateTime,
+        now,
+        websites,
+    } = options;
+
+    // if no dateTime or now option passed in
+    if (!dateTime && !now) {
+        logStringWithColor(
+            '\nMust pass in either dateTime or \'now\' flag. Did not pass either',
+            'red',
+        );
+        exit(0);
+    }
+
+    // if dateTime and now option passed in
+    if (dateTime && now) {
+        logStringWithColor(
+            '\nMust pass in either dateTime or \'now\' flag. Passed in both',
+            'red',
+        );
+        exit(0);
+    }
+
+    // Ensure datTime is in iso 8601 format and in the future if passed
+    if (dateTime) {
+        const parsedDate = parseDate(dateTime);
+        ensureFutureDateTime(parsedDate);
+    }
+
+    ensureSupportedWebsiteArray(websites);
+};
+
+/**
+ * Takes commander and config file strings and arranges them into a commander parsable
+ * options array
+ *
+ * @param {Object} param0 Args to append into commander parse-able array
+ * @returns {string[]}
+ */
+export const buildCommanderOptions = ({
+    website,
+    user,
+    dateTime,
+    now,
+}) => {
+    const commanderOptions = [];
+    if (website) {
+        commanderOptions.push(
+            '--website',
+            website,
+        );
+    }
+    if (user) {
+        commanderOptions.push(
+            '--user',
+            user,
+        );
+    }
+    if (dateTime) {
+        commanderOptions.push(
+            '--date-time',
+            dateTime,
+        );
+    }
+    if (now) {
+        commanderOptions.push('--now');
+    }
+
+    return commanderOptions;
 };
