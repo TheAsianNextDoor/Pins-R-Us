@@ -11,33 +11,19 @@ import { getBooleanEnvVariable } from '../../environmentVariables';
 
 const shouldPurchase = getBooleanEnvVariable('shouldPurchase');
 
-export default class ShopifyPayment {
+export default class NikePayment {
     constructor() {
-        this.contactBy = by.xpath(`//div[${
-            containsNormalizedClass('review-block__content')
-        }]/bdo`);
-        this.addressBy = by.xpath(`//div[${
-            containsNormalizedClass('review-block__content')
-        }]/bdo`);
-        this.rateBy = by.xpath(`//div[${
-            containsNormalizedClass('review-block__content')
-        } and @data-review-section = 'shipping-cost']`);
-
         this.cardNumberBy = addBys(
-            by.className('card-fields-iframe', 0),
-            by.id('number'),
-        );
-        this.cardNameOnBy = addBys(
-            by.className('card-fields-iframe', 1),
-            by.id('name'),
+            by.xpath('//iframe[@title = "Credit Card Form"]'),
+            by.id('creditCardNumber'),
         );
         this.cardExpirationDateBy = addBys(
-            by.className('card-fields-iframe', 2),
-            by.id('expiry'),
+            by.xpath('//iframe[@title = "Credit Card Form"]'),
+            by.id('expirationDate'),
         );
         this.cardSecurityCodeBy = addBys(
-            by.className('card-fields-iframe', 3),
-            by.id('verification_value'),
+            by.xpath('//iframe[@title = "Credit Card Form"]'),
+            by.id('cvNumber'),
         );
 
         this.payNowButtonBy = by.xpath(`//span[${
@@ -48,7 +34,6 @@ export default class ShopifyPayment {
 
         // controls
         this.cardNumber = new Input(this.cardNumberBy);
-        this.cardNameOn = new Input(this.cardNameOnBy);
         this.cardExpirationDate = new Input(this.cardExpirationDateBy);
         this.cardSecurityCode = new Input(this.cardSecurityCodeBy);
         this.payNowButton = new Button(this.payNowButtonBy);
@@ -62,12 +47,10 @@ export default class ShopifyPayment {
      */
     expressPay = async ({
         cardNumber,
-        cardNameOn,
         cardExpirationDate,
         cardSecurityCode,
     }) => {
-        await this.cardNumber.sendKeysOneAtATime(cardNumber);
-        await this.cardNameOn.sendKeysOneAtATime(cardNameOn);
+        await this.cardNumber.sendKeysOneAtATimeAndValidateNormalized(cardNumber);
         await this.cardExpirationDate.sendKeysOneAtATimeAndValidateNormalized(cardExpirationDate);
         await this.cardSecurityCode.sendKeysOneAtATime(cardSecurityCode);
         if (shouldPurchase) {

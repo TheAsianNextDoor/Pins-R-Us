@@ -50,3 +50,5 @@ export const stringifyObjectWithColor = (
         4,
     ),
 );
+
+export const normalizeTextWithSpaces = async (text) => text.replace(/ /g, '');

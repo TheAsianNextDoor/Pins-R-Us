@@ -4,19 +4,19 @@ import {
     // eslint-disable-next-line no-unused-vars
     WebElement,
 } from 'selenium-webdriver';
-import sleep from 'sleep-promise';
 import { getDriver } from '../driver';
 import {
     retryWithElement,
     basicRetry,
 } from './retryUtils';
-import { locateElement } from './elementUtils';
 import { refreshPage } from './navigationUtils';
 // eslint-disable-next-line no-unused-vars
 import { ByArray } from './byUtils';
 import { stringifyObjectWithColor } from './stringUtils';
+import { getIntEnvVariable } from '../environmentVariables';
 
-export const waitUntilElementNotFound = { toString: () => 'waitUntil ElementNotFound' };
+const refreshTimeout = getIntEnvVariable('refreshTimeout');
+export const elementNotFound = { toString: () => 'waitUntil ElementNotFound' };
 
 /**
  * Waits until a WebElement is visible or the maximum time has elapsed
@@ -45,8 +45,7 @@ export const waitUntilElementIsVisible = async (
         if (shouldThrowError) {
             throw new Error(e);
         }
-        console.log(`NOT THROWING in waitUntilElementIsVisible when using locator: ${stringifyObjectWithColor(by)}`);
-        return waitUntilElementNotFound;
+        return elementNotFound;
     }
 };
 
@@ -77,8 +76,7 @@ export const waitUntilElementIsEnabled = async (
         if (shouldThrowError) {
             throw new Error(e);
         }
-        console.log(`NOT THROWING in waitUntilElementIsEnabled when using locator: ${stringifyObjectWithColor(by)}`);
-        return waitUntilElementNotFound;
+        return elementNotFound;
     }
 };
 
@@ -93,15 +91,13 @@ export const waitUntilElementIsEnabled = async (
 export const refreshPageUntilElementIsLocated = async (
     by,
     shouldThrowError = true,
-    timeout = 300000,
+    timeout = refreshTimeout,
 ) => {
     try {
         return basicRetry(
             async () => {
-                const element = await locateElement(by, false);
-                if (!element) {
-                    // wait 3 seconds between each refresh
-                    await sleep(3000);
+                const result = await waitUntilElementIsVisible(by, false, 3000);
+                if (result === elementNotFound) {
                     await refreshPage();
                     throw new Error(`Could not refresh page and find element with by ${stringifyObjectWithColor(by)}`);
                 }
@@ -112,7 +108,6 @@ export const refreshPageUntilElementIsLocated = async (
         if (shouldThrowError) {
             throw new Error(e);
         }
-        console.log(`NOT THROWING in refreshUntilElementIsLocated when using locator: ${stringifyObjectWithColor(by)}`);
-        return waitUntilElementNotFound;
+        return elementNotFound;
     }
 };

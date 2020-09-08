@@ -7,6 +7,7 @@ import {
     setValue,
 } from '../utilities/actionUtils';
 import { basicRetry } from '../utilities/retryUtils';
+import { normalizeTextWithSpaces } from '../utilities/stringUtils';
 
 export default class Input {
     constructor(rootBy) {
@@ -75,23 +76,6 @@ export default class Input {
     }
 
     /**
-     * Sends keys to the input one char at a time, waiting in between
-     *
-     * @param {string} text The string to send
-     * @returns {Promise<void>}
-     */
-    sendKeysOneAtATimeAndTabOff = async (text) => {
-        await basicRetry(async () => {
-            await sendKeysOneAtATime(this.rootBy, text);
-            await pressTab();
-            const actualText = await this.getValue();
-            if (text !== actualText) {
-                throw new Error(`Text Box text was not set correctly: ${text} was supposed to be ${actualText}`);
-            }
-        });
-    }
-
-    /**
      * Sets the value attribute of the input forcefully
      *
      * @param {String} value The string to set
@@ -103,6 +87,22 @@ export default class Input {
             const actualText = await this.getValue();
             if (value !== actualText) {
                 throw new Error(`Text Box text was not set correctly: ${value} was supposed to be ${actualText}`);
+            }
+        });
+    }
+
+    /**
+     * Send keys to the input one char at a time, waiting in between.
+     * Normalizes text from textbox for diffing
+     * @param {*} text The string to set
+     */
+    sendKeysOneAtATimeAndValidateNormalized = async (text) => {
+        await basicRetry(async () => {
+            await sendKeysOneAtATime(this.rootBy, text);
+            const actualText = await this.getValue();
+            const normalizedText = await normalizeTextWithSpaces(actualText);
+            if (text !== normalizedText) {
+                throw new Error(`Text Box text was not set correctly: ${text} was supposed to be ${normalizedText}`);
             }
         });
     }
