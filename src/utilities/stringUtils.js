@@ -51,4 +51,8 @@ export const stringifyObjectWithColor = (
     ),
 );
 
+/**
+ * Replaces all spaces with empty string
+ * @param {*} text string to normalize
+ */
 export const normalizeTextWithSpaces = async (text) => text.replace(/ /g, '');
