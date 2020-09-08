@@ -34,12 +34,10 @@ export const scheduleAsyncFunction = (
         })
         .finally(async () => {
             await sleep(2000);
-            if (shouldExitChrome) {
+            if (shouldExitChrome && shouldExit) {
                 console.log('Exiting Script\n');
                 await killDriver();
-                if (shouldExit) {
-                    exit(0);
-                }
+                exit(0);
             }
             console.log('\nLeaving Chrome open, press ctrl + c to exit script');
         }),
