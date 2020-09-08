@@ -16,6 +16,8 @@ import { stringifyObjectWithColor } from './stringUtils';
 import { getIntEnvVariable } from '../environmentVariables';
 
 const refreshTimeout = getIntEnvVariable('refreshTimeout');
+const waitUntilTimeout = getIntEnvVariable('waitUntilTimeout');
+
 export const elementNotFound = { toString: () => 'waitUntil ElementNotFound' };
 
 /**
@@ -29,7 +31,7 @@ export const elementNotFound = { toString: () => 'waitUntil ElementNotFound' };
 export const waitUntilElementIsVisible = async (
     by,
     shouldThrowError = true,
-    timeout = 20000,
+    timeout = waitUntilTimeout,
 ) => {
     const driver = getDriver();
     try {
@@ -60,7 +62,7 @@ export const waitUntilElementIsVisible = async (
 export const waitUntilElementIsEnabled = async (
     by,
     shouldThrowError = true,
-    timeout = 20000,
+    timeout = waitUntilTimeout,
 ) => {
     const driver = getDriver();
     try {
