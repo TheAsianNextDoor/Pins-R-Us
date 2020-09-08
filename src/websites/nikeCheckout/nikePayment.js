@@ -13,16 +13,6 @@ const shouldPurchase = getBooleanEnvVariable('shouldPurchase');
 
 export default class NikePayment {
     constructor() {
-        this.contactBy = by.xpath(`//div[${
-            containsNormalizedClass('review-block__content')
-        }]/bdo`);
-        this.addressBy = by.xpath(`//div[${
-            containsNormalizedClass('review-block__content')
-        }]/bdo`);
-        this.rateBy = by.xpath(`//div[${
-            containsNormalizedClass('review-block__content')
-        } and @data-review-section = 'shipping-cost']`);
-
         this.cardNumberBy = addBys(
             by.xpath('//iframe[@title = "Credit Card Form"]'),
             by.id('creditCardNumber'),

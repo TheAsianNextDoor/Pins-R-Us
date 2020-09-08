@@ -7,7 +7,7 @@ import {
     setValue,
 } from '../utilities/actionUtils';
 import { basicRetry } from '../utilities/retryUtils';
-import { normalizeTextWithSpaces } from '../utilities/stringUtils'
+import { normalizeTextWithSpaces } from '../utilities/stringUtils';
 
 export default class Input {
     constructor(rootBy) {

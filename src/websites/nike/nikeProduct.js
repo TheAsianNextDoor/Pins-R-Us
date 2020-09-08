@@ -52,8 +52,8 @@ export default class NikeProduct {
 
     /**
      * Clicks correct size and gender provided by user
-     * @param {*} size 
-     * @param {*} gender 
+     * @param {*} size
+     * @param {*} gender
      */
     clickSize = async (size, gender) => {
         const sizeButton = await this.pickSizeButton(size, gender);

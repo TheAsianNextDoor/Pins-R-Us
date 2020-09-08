@@ -47,18 +47,6 @@ export default class NikeInformation {
         state,
         zip,
     }) => {
-        if (
-            !email
-            || !phoneNumber
-            || !firstName
-            || !lastName
-            || !address
-            || !city
-            || !state
-            || !zip
-        ) {
-            throw new Error(stringWithColor('Must pass in all checkout fields, check config.js', 'red'));
-        }
         await this.email.sendKeys(email);
         await this.phoneNumber.sendKeysAndTabOff(phoneNumber);
         await this.firstName.sendKeysAndTabOff(firstName);
