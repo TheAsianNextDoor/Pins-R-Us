@@ -60,8 +60,8 @@ export default class NikePayment {
         cardExpirationDate,
         cardSecurityCode,
     }) => {
-        await this.cardNumber.sendKeysOneAtATime(cardNumber);
-        await this.cardExpirationDate.sendKeysOneAtATime(cardExpirationDate);
+        await this.cardNumber.sendKeysOneAtATimeAndValidateNormalized(cardNumber);
+        await this.cardExpirationDate.sendKeysOneAtATimeAndValidateNormalized(cardExpirationDate);
         await this.cardSecurityCode.sendKeysOneAtATime(cardSecurityCode);
         if (shouldPurchase) {
             await this.payNowButton.click();

@@ -17,7 +17,7 @@ export const config = {
         zip: '18431',
         cardNumber: '1234123412341234',
         cardNameOn: 'Donald Trump',
-        cardExpirationDate: '01 / 01',
+        cardExpirationDate: '01/01',
         cardSecurityCode: '123',
     },
     userArtistry: {
@@ -35,7 +35,7 @@ export const config = {
         zip: '44102',
         cardNumber: '1234123412341234',
         cardNameOn: 'Barrack Obama',
-        cardExpirationDate: '01 / 01',
+        cardExpirationDate: '01/01',
         cardSecurityCode: '1234',
     },
     userNike: {
@@ -49,7 +49,7 @@ export const config = {
         city: 'Cleveland',
         state: 'Ohio',
         zip: '44102',
-        cardNumber: '1234 1234 1234 1234',
+        cardNumber: '1234123412341234',
         cardNameOn: 'Barrack Obama',
         cardExpirationDate: '01/01',
         cardSecurityCode: '123',
@@ -147,7 +147,7 @@ export const userJsonSchema = {
             description: 'The expiration date of the card',
             type: 'string',
             required: true,
-            pattern: '[0-9][0-9]( )?/( )?[0-9][0-9]',
+            pattern: '[0-9][0-9]/[0-9][0-9]',
         },
         cardSecurityCode: {
             description: 'The security code of the card',

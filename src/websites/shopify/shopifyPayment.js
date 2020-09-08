@@ -68,7 +68,7 @@ export default class ShopifyPayment {
     }) => {
         await this.cardNumber.sendKeysOneAtATime(cardNumber);
         await this.cardNameOn.sendKeysOneAtATime(cardNameOn);
-        await this.cardExpirationDate.sendKeysOneAtATime(cardExpirationDate);
+        await this.cardExpirationDate.sendKeysOneAtATimeAndValidateNormalized(cardExpirationDate);
         await this.cardSecurityCode.sendKeysOneAtATime(cardSecurityCode);
         if (shouldPurchase) {
             await this.payNowButton.click();
