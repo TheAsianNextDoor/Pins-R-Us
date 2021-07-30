@@ -1,4 +1,4 @@
-# Automate Chrome
+# Pins R Us
 
 <br>
 
